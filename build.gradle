@@ -1,0 +1,15 @@
+apply plugin: 'java'
+apply plugin: 'application'
+
+sourceCompatibility = 1.8
+mainClassName = 'com.dovydasvenckus.todo.TodoApplication'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'com.sparkjava:spark-core:2.5'
+
+    testCompile 'junit:junit:4.12'
+}
