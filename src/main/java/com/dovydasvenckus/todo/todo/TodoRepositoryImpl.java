@@ -4,19 +4,35 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class TodoRepositoryImpl implements TodoRepository{
+import static java.util.stream.Collectors.toList;
+
+public class TodoRepositoryImpl implements TodoRepository {
     private final List<Todo> todoList = new ArrayList<>();
 
     @Override
     public Optional<Todo> find(String uuid) {
         return todoList.stream()
-                .filter(todo -> todo.getUuid().equals(uuid))
+                .filter(todo -> todo.getId().equals(uuid))
                 .findAny();
     }
 
     @Override
     public List<Todo> listAll() {
         return todoList;
+    }
+
+    @Override
+    public List<Todo> listDone() {
+        return todoList.stream()
+                .filter(Todo::getIsDone)
+                .collect(toList());
+    }
+
+    @Override
+    public List<Todo> listActive() {
+        return todoList.stream()
+                .filter(todo -> !todo.getIsDone())
+                .collect(toList());
     }
 
     @Override
@@ -27,12 +43,17 @@ public class TodoRepositoryImpl implements TodoRepository{
     @Override
     public void update(String uuid, String title) {
         find(uuid)
-                .ifPresent(todo -> todo.setDescription(title));
+                .ifPresent(todo -> {
+                            if (!todo.getTitle().trim().isEmpty())
+                                todo.setTitle(title);
+                            else remove(uuid);
+                        }
+                );
     }
 
     @Override
     public void remove(String uuid) {
         find(uuid)
-                .ifPresent(todo -> todoList.remove(todo));
+                .ifPresent(todoList::remove);
     }
 }

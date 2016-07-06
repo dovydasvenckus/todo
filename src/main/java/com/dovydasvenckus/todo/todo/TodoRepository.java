@@ -8,6 +8,10 @@ public interface TodoRepository {
 
     List<Todo> listAll();
 
+    List<Todo> listDone();
+
+    List<Todo> listActive();
+
     void add(Todo todo);
 
     void update(String uuid, String title);

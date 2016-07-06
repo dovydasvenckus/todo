@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Todo</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<ul>
+    <section id="todoapp" ic-target="this">
+        #parse("/templates/todoList.vm")
+    </section>
+    <div id="info">
+        <p>Double-click to edit a todo</p>
+    </div>
+</ul>
+
+</body>
+<script src="https://code.jquery.com/jquery-1.10.2.min.js"></script>
+<script src="https://intercoolerreleases-leaddynocom.netdna-ssl.com/intercooler-0.9.7.min.js"></script>
+<script src="/js/app.js"></script>
+</html>

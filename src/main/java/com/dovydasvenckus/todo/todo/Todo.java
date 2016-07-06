@@ -5,28 +5,28 @@ import java.util.UUID;
 
 public class Todo {
 
-    private String uuid = UUID.randomUUID().toString();
-    private String description;
+    private String id = UUID.randomUUID().toString();
+    private String title;
     private boolean isDone = false;
 
-    public Todo(String description) {
-        this.description = description;
+    public Todo(String title) {
+        this.title = title;
     }
 
-    public String getUuid() {
-        return uuid;
+    public String getId() {
+        return id;
     }
 
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getDescription() {
-        return description;
+    public String getTitle() {
+        return title;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
 
@@ -38,16 +38,20 @@ public class Todo {
         isDone = done;
     }
 
+    public void toggleDone() {
+        isDone = !isDone;
+    }
+
     @Override
     public boolean equals(Object o) {
         if ((o != null) && (o instanceof Todo)) {
-            return uuid.equals(((Todo) o).getUuid());
+            return id.equals(((Todo) o).getId());
         }
         return false;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(uuid);
+        return Objects.hash(id);
     }
 }
