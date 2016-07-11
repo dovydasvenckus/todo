@@ -1,6 +1,7 @@
 package com.dovydasvenckus.todo.todo;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TodoService {
     private TodoRepository todoRepository;
@@ -22,5 +23,21 @@ public class TodoService {
                 result = todoRepository.listAll();
         }
         return  result;
+    }
+
+    public void toggleDo(Long id) {
+        Optional<Todo> todo = todoRepository.find(id);
+        todo.ifPresent(t -> {
+            t.toggleDone();
+            todoRepository.update(t);
+        });
+    }
+
+    public void toggleAll() {
+        List<Todo> todos = todoRepository.listAll();
+        todos.forEach(todo -> {
+            todo.toggleDone();
+            todoRepository.update(todo);
+        });
     }
 }

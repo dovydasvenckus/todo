@@ -1,9 +1,13 @@
 package com.dovydasvenckus.todo;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.dovydasvenckus.todo.helper.CommandLineOptions;
 import com.dovydasvenckus.todo.todo.Todo;
 import com.dovydasvenckus.todo.todo.TodoRepository;
 import com.dovydasvenckus.todo.todo.TodoRepositoryImpl;
 import com.dovydasvenckus.todo.todo.TodoService;
+import org.sql2o.Sql2o;
 import spark.ModelAndView;
 import spark.Request;
 import spark.Response;
@@ -16,10 +20,14 @@ import java.util.Optional;
 import static spark.Spark.*;
 
 public class TodoApplication {
-    private static TodoRepository todoRepository = new TodoRepositoryImpl();
-    private static TodoService todoService = new TodoService(todoRepository);
+    private static Sql2o sql2o;
+    private static TodoRepository todoRepository;
+    private static TodoService todoService;
 
     public static void main(String[] args) {
+        CommandLineOptions options = new CommandLineOptions();
+        new JCommander(options, args);
+        initModules(options);
         staticFiles.location("/public");
 
         get("/", (req, res) -> renderTodos(req));
@@ -38,36 +46,45 @@ public class TodoApplication {
 
     }
 
+    private static void initModules(CommandLineOptions options) {
+        sql2o = new Sql2o(options.getDbHost(), options.getDbUser(), options.getDbPassword());
+        todoRepository = new TodoRepositoryImpl(sql2o);
+        todoService = new TodoService(todoRepository);
+    }
+
     private static String addToDo(Request req, Response res) {
         todoRepository.add(new Todo(req.queryParams("todo-title")));
         return renderTodos(req);
     }
 
     private static String toggleTodo(Request req, Response res) {
-        todoRepository.find(req.params(":id")).ifPresent(Todo::toggleDone);
+        todoService.toggleDo(Long.parseLong(req.params(":id")));
         return renderTodos(req);
     }
 
     private static String toggleAll(Request req, Response res) {
-        todoRepository.listAll().stream()
-                .forEach(Todo::toggleDone);
+        todoService.toggleAll();
         return renderTodos(req);
     }
 
     private static String update(Request req, Response res) {
-        todoRepository.update(req.params("id"), req.queryParams("todo-title"));
+        Optional<Todo> todo = todoRepository.find(Long.parseLong(req.params(":id")));
+        if (todo.isPresent()){
+            todo.get().setTitle(req.queryParams("todo-title"));
+            todoRepository.update(todo.get());
+        }
         return renderTodos(req);
     }
 
     private static String deleteTodo(Request req, Response res) {
         String id = req.params(":id");
-        todoRepository.remove(id);
+        todoRepository.remove(Long.parseLong(id));
         return renderTodos(req);
     }
 
     private static String renderEditTodo(Request req) {
         return renderTemplate("templates/editTodo.vm",
-                new HashMap(){{ put("todo", todoRepository.find(req.params(":id")).get()); }});
+                new HashMap(){{ put("todo", todoRepository.find(Long.parseLong(req.params(":id"))).get()); }});
     }
 
     private static String renderTodos(Request req) {

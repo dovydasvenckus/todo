@@ -1,23 +1,27 @@
 package com.dovydasvenckus.todo.todo;
 
+import java.util.Date;
 import java.util.Objects;
-import java.util.UUID;
 
 public class Todo {
 
-    private String id = UUID.randomUUID().toString();
+    private Long id;
     private String title;
     private boolean isDone = false;
+    private Date createdAt;
+    private Date updatedAt;
 
     public Todo(String title) {
         this.title = title;
+        this.createdAt = new Date();
+        this.updatedAt = new Date();
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -40,6 +44,22 @@ public class Todo {
 
     public void toggleDone() {
         isDone = !isDone;
+    }
+
+    public Date getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(Date updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override
