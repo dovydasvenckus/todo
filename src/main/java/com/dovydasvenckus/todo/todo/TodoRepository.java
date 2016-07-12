@@ -12,6 +12,8 @@ public interface TodoRepository {
 
     List<Todo> listActive();
 
+    void batchUpdate(List<Todo> todoList);
+
     void add(Todo todo);
 
     void update(Todo todo);

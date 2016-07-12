@@ -1,6 +1,7 @@
 package com.dovydasvenckus.todo.todo;
 
 import org.sql2o.Connection;
+import org.sql2o.Query;
 import org.sql2o.Sql2o;
 
 import java.util.*;
@@ -8,7 +9,8 @@ import java.util.*;
 public class TodoRepositoryImpl implements TodoRepository {
 
     private Sql2o sql2o;
-    private Map<String, String > columnMap;
+    private Map<String, String> columnMap;
+
     public TodoRepositoryImpl(Sql2o sql2o) {
         this.sql2o = sql2o;
         initColMap();
@@ -63,6 +65,18 @@ public class TodoRepositoryImpl implements TodoRepository {
     }
 
     @Override
+    public void batchUpdate(List<Todo> todoList) {
+        try (Connection conn = sql2o.beginTransaction()) {
+            Query updateQuery = getUpdateQuery(conn);
+            todoList.forEach(todo ->
+                    addParamsToUpdate(updateQuery, todo).addToBatch());
+
+            updateQuery.executeBatch();
+            conn.commit();
+        }
+    }
+
+    @Override
     public void add(Todo todo) {
         try (Connection conn = sql2o.open()) {
             Long id = (Long) conn.createQuery("INSERT INTO todo(title, is_done, created_at, updated_at) " +
@@ -81,14 +95,7 @@ public class TodoRepositoryImpl implements TodoRepository {
     @Override
     public void update(Todo todo) {
         try (Connection conn = sql2o.open()) {
-            conn
-                    .createQuery("UPDATE todo " +
-                            "SET title = :title, is_done = :done, updated_at = :updated " +
-                            "WHERE todo_id = :id")
-                    .addParameter("id", todo.getId())
-                    .addParameter("title", todo.getTitle())
-                    .addParameter("done", todo.getIsDone())
-                    .addParameter("updated", new Date())
+            constructUpdateQuery(conn, todo)
                     .executeUpdate();
         }
     }
@@ -101,5 +108,24 @@ public class TodoRepositoryImpl implements TodoRepository {
                     .addParameter("id", id)
                     .executeUpdate();
         }
+    }
+
+    private Query constructUpdateQuery(Connection connection, Todo todo) {
+        Query query = getUpdateQuery(connection);
+        addParamsToUpdate(query, todo);
+        return query;
+    }
+
+    private Query getUpdateQuery(Connection connection) {
+        return connection.createQuery("UPDATE todo " +
+                "SET title = :title, is_done = :done, updated_at = :updated " +
+                "WHERE todo_id = :id");
+    }
+
+    private Query addParamsToUpdate(Query query, Todo todo) {
+        return query.addParameter("id", todo.getId())
+                .addParameter("title", todo.getTitle())
+                .addParameter("done", todo.getIsDone())
+                .addParameter("updated", new Date());
     }
 }

@@ -35,9 +35,7 @@ public class TodoService {
 
     public void toggleAll() {
         List<Todo> todos = todoRepository.listAll();
-        todos.forEach(todo -> {
-            todo.toggleDone();
-            todoRepository.update(todo);
-        });
+        todos.forEach(Todo::toggleDone);
+        todoRepository.batchUpdate(todos);
     }
 }
