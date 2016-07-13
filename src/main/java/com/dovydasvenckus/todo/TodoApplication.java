@@ -1,7 +1,6 @@
 package com.dovydasvenckus.todo;
 
 import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
 import com.dovydasvenckus.todo.helper.CommandLineOptions;
 import com.dovydasvenckus.todo.todo.Todo;
 import com.dovydasvenckus.todo.todo.TodoRepository;
@@ -14,9 +13,12 @@ import spark.Response;
 import spark.template.velocity.VelocityTemplateEngine;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import static java.util.Optional.empty;
+import static java.util.Optional.of;
 import static spark.Spark.*;
 
 public class TodoApplication {
@@ -69,7 +71,7 @@ public class TodoApplication {
 
     private static String update(Request req, Response res) {
         Optional<Todo> todo = todoRepository.find(Long.parseLong(req.params(":id")));
-        if (todo.isPresent()){
+        if (todo.isPresent()) {
             todo.get().setTitle(req.queryParams("todo-title"));
             todoRepository.update(todo.get());
         }
@@ -84,17 +86,21 @@ public class TodoApplication {
 
     private static String renderEditTodo(Request req) {
         return renderTemplate("templates/editTodo.vm",
-                new HashMap(){{ put("todo", todoRepository.find(Long.parseLong(req.params(":id"))).get()); }});
+                new HashMap() {{
+                    put("todo", todoRepository.find(Long.parseLong(req.params(":id"))).get());
+                }});
     }
 
     private static String renderTodos(Request req) {
         String statusStr = req.queryParams("status");
+        List<Todo> todoList = todoService.getTodos(statusStr != null ? statusStr : "");
+        Long activeCount = todoRepository.count(of(false));
         Map<String, Object> model = new HashMap<>();
-        model.put("todos", todoService.getTodos(statusStr != null ? statusStr : ""));
-        model.put("allCompleted", todoRepository.listAll().size() == todoRepository.listDone().size());
+        model.put("todos", todoList);
+        model.put("allCompleted", todoRepository.count(empty()) == todoRepository.count(of(true)));
         model.put("filter", Optional.ofNullable(statusStr).orElse(""));
-        model.put("activeCount", todoRepository.listActive().size());
-        model.put("anyActive", todoRepository.listActive().size() > 0);
+        model.put("activeCount", activeCount);
+        model.put("anyActive", activeCount > 0);
         model.put("status", Optional.ofNullable(statusStr).orElse(""));
 
         if ("true".equals(req.queryParams("ic-request"))) {

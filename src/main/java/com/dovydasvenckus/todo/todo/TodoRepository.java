@@ -12,6 +12,8 @@ public interface TodoRepository {
 
     List<Todo> listActive();
 
+    Long count(Optional<Boolean> isDone);
+
     void batchUpdate(List<Todo> todoList);
 
     void add(Todo todo);

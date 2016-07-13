@@ -65,6 +65,22 @@ public class TodoRepositoryImpl implements TodoRepository {
     }
 
     @Override
+    public Long count(Optional<Boolean> isDone) {
+        String sql = "SELECT COUNT (todo_id) FROM todo ";
+        try (Connection con = sql2o.open()) {
+            if (isDone.isPresent()) {
+                return con.createQuery(sql + " WHERE is_done = :done")
+                        .addParameter("done", isDone.get() ? "TRUE" : "FALSE")
+                        .executeScalar(Long.class);
+            } else {
+                return con.createQuery(sql)
+                        .executeScalar(Long.class);
+            }
+        }
+
+    }
+
+    @Override
     public void batchUpdate(List<Todo> todoList) {
         try (Connection conn = sql2o.beginTransaction()) {
             Query updateQuery = getUpdateQuery(conn);
