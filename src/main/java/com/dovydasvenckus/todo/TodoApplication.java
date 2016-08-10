@@ -2,6 +2,8 @@ package com.dovydasvenckus.todo;
 
 import com.beust.jcommander.JCommander;
 import com.dovydasvenckus.todo.helper.CommandLineOptions;
+import com.dovydasvenckus.todo.helper.db.DbConnectionFactory;
+import com.dovydasvenckus.todo.helper.db.SqlFileExecutor;
 import com.dovydasvenckus.todo.todo.Todo;
 import com.dovydasvenckus.todo.todo.TodoRepository;
 import com.dovydasvenckus.todo.todo.TodoRepositoryImpl;
@@ -49,10 +51,17 @@ public class TodoApplication {
     }
 
     private static void initModules(CommandLineOptions options) {
-        sql2o = new Sql2o(options.getDbHost(), options.getDbUser(), options.getDbPassword());
+        sql2o = DbConnectionFactory.getInstance(options);
+
+        if (options.getDbHost() == null) {
+            SqlFileExecutor sqlFileExecutor = new SqlFileExecutor(sql2o);
+            sqlFileExecutor.execute("sql/hsqldb/create.sql");
+        }
+
         todoRepository = new TodoRepositoryImpl(sql2o);
         todoService = new TodoService(todoRepository);
     }
+
 
     private static String addToDo(Request req, Response res) {
         todoRepository.add(new Todo(req.queryParams("todo-title")));
@@ -97,7 +106,7 @@ public class TodoApplication {
         Long activeCount = todoRepository.count(of(false));
         Map<String, Object> model = new HashMap<>();
         model.put("todos", todoList);
-        model.put("allCompleted", todoRepository.count(empty()) == todoRepository.count(of(true)));
+        model.put("allCompleted", todoRepository.count(empty()).equals(todoRepository.count(of(true))));
         model.put("filter", Optional.ofNullable(statusStr).orElse(""));
         model.put("activeCount", activeCount);
         model.put("anyActive", activeCount > 0);
