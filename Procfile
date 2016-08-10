@@ -1,0 +1,1 @@
+web: ./build/distributions/unpacked/todo/bin/todo
