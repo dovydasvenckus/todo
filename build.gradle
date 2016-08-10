@@ -22,3 +22,16 @@ dependencies {
 
     testCompile 'junit:junit:4.12'
 }
+
+
+task unzipDist(type: Copy) {
+    def zipFile = file("${buildDir}/distributions/todo.zip")
+    def outputDir = file("${buildDir}/distributions/unpacked")
+
+    from zipTree(zipFile)
+    into outputDir
+}
+
+task stage(dependsOn: ['clean', 'build', 'unzipDist'])
+build.mustRunAfter clean
+unzipDist.mustRunAfter build
