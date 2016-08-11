@@ -1,5 +1,15 @@
 apply plugin: 'java'
 apply plugin: 'application'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+    }
+}
 
 sourceCompatibility = 1.8
 mainClassName = 'com.dovydasvenckus.todo.TodoApplication'
@@ -24,14 +34,6 @@ dependencies {
 }
 
 
-task unzipDist(type: Copy) {
-    def zipFile = file("${buildDir}/distributions/todo.zip")
-    def outputDir = file("${buildDir}/distributions/unpacked")
 
-    from zipTree(zipFile)
-    into outputDir
-}
-
-task stage(dependsOn: ['clean', 'build', 'unzipDist'])
-build.mustRunAfter clean
-unzipDist.mustRunAfter build
+task stage(dependsOn: ['clean', 'shadowJar'])
+shadowJar.mustRunAfter clean

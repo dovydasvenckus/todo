@@ -3,14 +3,12 @@ package com.dovydasvenckus.todo.helper.db;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.URISyntaxException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import static java.nio.file.Files.readAllBytes;
-import static java.nio.file.Paths.get;
 
 public class SqlFileExecutor {
     private Sql2o sql2o;
@@ -33,13 +31,26 @@ public class SqlFileExecutor {
     private String readSqlScript(String fileName) {
         String script = null;
         try {
-            script = new String(readAllBytes(get(ClassLoader.getSystemResource(fileName).toURI())));
-        } catch (IOException | URISyntaxException | OutOfMemoryError ex) {
+            script = readFile(fileName);
+        } catch (IOException ex) {
             ex.printStackTrace();
             System.exit(-1);
         }
 
         return script;
+    }
+
+    private String readFile(String fileName) throws IOException {
+        StringBuilder result = new StringBuilder();
+        try (BufferedReader input = new BufferedReader(
+                new InputStreamReader(SqlFileExecutor.class.getResourceAsStream(fileName)))) {
+            String line;
+            while ((line = input.readLine()) != null) {
+                result.append(line);
+            }
+        }
+
+        return result.toString();
     }
 
 }

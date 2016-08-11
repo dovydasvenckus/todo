@@ -34,6 +34,8 @@ public class TodoApplication {
         initModules(options);
         staticFiles.location("/public");
 
+        port(8080);
+
         get("/", (req, res) -> renderTodos(req));
 
         get("/todos/:id/edit", (req, res) -> renderEditTodo(req));
@@ -55,7 +57,7 @@ public class TodoApplication {
 
         if (options.getDbHost() == null) {
             SqlFileExecutor sqlFileExecutor = new SqlFileExecutor(sql2o);
-            sqlFileExecutor.execute("sql/hsqldb/create.sql");
+            sqlFileExecutor.execute("/sql/hsqldb/create.sql");
         }
 
         todoRepository = new TodoRepositoryImpl(sql2o);

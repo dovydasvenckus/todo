@@ -1,1 +1,1 @@
-web: ./build/distributions/unpacked/todo/bin/todo
+web: java -jar build/libs/todo-all.jar
