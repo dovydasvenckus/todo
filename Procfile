@@ -1,1 +1,1 @@
-web: java -jar build/libs/todo-all.jar
+web: java -jar build/libs/todo-all.jar --port $PORT

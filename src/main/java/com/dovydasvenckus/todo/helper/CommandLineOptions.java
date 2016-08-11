@@ -12,6 +12,9 @@ public class CommandLineOptions {
     @Parameter(names = {"--db-pass"})
     private String dbPassword;
 
+    @Parameter(names = "--port")
+    private String port;
+
     public String getDbHost() {
         return dbHost;
     }
@@ -22,5 +25,9 @@ public class CommandLineOptions {
 
     public String getDbPassword() {
         return dbPassword;
+    }
+
+    public String getPort() {
+        return port;
     }
 }

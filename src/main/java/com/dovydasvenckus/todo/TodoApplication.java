@@ -31,10 +31,11 @@ public class TodoApplication {
     public static void main(String[] args) {
         CommandLineOptions options = new CommandLineOptions();
         new JCommander(options, args);
+        port(options.getPort() != null ? new Integer(options.getPort()) : 8080);
+
         initModules(options);
         staticFiles.location("/public");
 
-        port(8080);
 
         get("/", (req, res) -> renderTodos(req));
 
