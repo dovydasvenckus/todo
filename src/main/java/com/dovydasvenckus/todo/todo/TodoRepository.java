@@ -3,7 +3,7 @@ package com.dovydasvenckus.todo.todo;
 import java.util.List;
 import java.util.Optional;
 
-public interface TodoRepository {
+public interface TodoRepository{
     Optional<Todo> find(Long id);
 
     List<Todo> listAll();

@@ -1,2 +1,2 @@
 # todo
-Simple todo list web app.
+Simple todo list web api.
