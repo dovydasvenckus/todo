@@ -39,18 +39,11 @@ public class TodoRepositoryImpl implements TodoRepository {
 
     @Override
     public List<Todo> listAll() {
-        try {
-            try (Connection conn = sql2o.open()) {
-                return conn
-                        .createQuery("SELECT * FROM todo")
-                        .executeAndFetch(Todo.class);
-            }
+        try (Connection conn = sql2o.open()) {
+            return conn
+                    .createQuery("SELECT * FROM todo")
+                    .executeAndFetch(Todo.class);
         }
-        catch (Exception ex) {
-            System.err.println(ex.getMessage());
-            ex.printStackTrace();
-        }
-        return null;
     }
 
     @Override
@@ -102,14 +95,14 @@ public class TodoRepositoryImpl implements TodoRepository {
     @Override
     public void add(Todo todo) {
         try (Connection conn = sql2o.open()) {
-            Long id = (Long) conn.createQuery("INSERT INTO todo(title, is_done, created_at, updated_at) " +
+            Long id = conn.createQuery("INSERT INTO todo(title, is_done, created_at, updated_at) " +
                     "VALUES (:title, :done, :created, :updated)", true)
                     .addParameter("title", todo.getTitle())
                     .addParameter("done", todo.getIsDone())
                     .addParameter("created", todo.getCreatedAt())
                     .addParameter("updated", todo.getUpdatedAt())
                     .executeUpdate()
-                    .getKey();
+                    .getKey(Long.class);
 
             todo.setId(id);
         }
