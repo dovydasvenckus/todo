@@ -39,11 +39,18 @@ public class TodoRepositoryImpl implements TodoRepository {
 
     @Override
     public List<Todo> listAll() {
-        try (Connection conn = sql2o.open()) {
-            return conn
-                    .createQuery("SELECT * FROM todo")
-                    .executeAndFetch(Todo.class);
+        try {
+            try (Connection conn = sql2o.open()) {
+                return conn
+                        .createQuery("SELECT * FROM todo")
+                        .executeAndFetch(Todo.class);
+            }
         }
+        catch (Exception ex) {
+            System.err.println(ex.getMessage());
+            ex.printStackTrace();
+        }
+        return null;
     }
 
     @Override
