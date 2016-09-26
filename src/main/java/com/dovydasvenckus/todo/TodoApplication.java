@@ -1,7 +1,7 @@
 package com.dovydasvenckus.todo;
 
 import com.beust.jcommander.JCommander;
-import com.dovydasvenckus.todo.helper.CommandLineOptions;
+import com.dovydasvenckus.todo.helper.cmd.options.CommandLineOptions;
 import com.dovydasvenckus.todo.helper.db.DbConnectionFactory;
 import com.dovydasvenckus.todo.helper.db.DbFromEnv;
 import com.dovydasvenckus.todo.helper.db.SqlFileExecutor;

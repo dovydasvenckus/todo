@@ -1,9 +1,9 @@
-package com.dovydasvenckus.todo.helper;
+package com.dovydasvenckus.todo.helper.cmd.options;
 
 import com.beust.jcommander.Parameter;
 
 public class CommandLineOptions {
-    @Parameter(names = {"env"})
+    @Parameter(names = {"--env"})
     private String env;
 
     @Parameter(names = {"--db-host"})

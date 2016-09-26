@@ -1,6 +1,6 @@
 package com.dovydasvenckus.todo.helper.db;
 
-import com.dovydasvenckus.todo.helper.CommandLineOptions;
+import com.dovydasvenckus.todo.helper.cmd.options.CommandLineOptions;
 import org.sql2o.Sql2o;
 
 public class DbConnectionFactory {
