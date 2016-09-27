@@ -24,7 +24,6 @@ dependencies {
     compile 'com.google.code.gson:gson:2.7'
 
     compile 'org.sql2o:sql2o:1.5.4'
-    compile 'org.hsqldb:hsqldb:2.3.4'
     compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
 
     compile 'com.beust:jcommander:1.48'

@@ -5,9 +5,7 @@ import com.google.gson.Gson;
 import org.sql2o.Sql2o;
 import spark.Route;
 
-import static spark.Spark.delete;
-import static spark.Spark.get;
-import static spark.Spark.post;
+import static spark.Spark.*;
 
 public class TodoController implements Controller {
     private static String URL = "/api/todo";

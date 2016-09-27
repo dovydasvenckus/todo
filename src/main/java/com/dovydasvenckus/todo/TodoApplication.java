@@ -7,6 +7,8 @@ import com.dovydasvenckus.todo.helper.db.DbConnectionFactory;
 import com.dovydasvenckus.todo.helper.db.SqlFileExecutor;
 import com.dovydasvenckus.todo.todo.TodoController;
 import com.dovydasvenckus.todo.util.Controller;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sql2o.Sql2o;
 
 import java.util.ArrayList;
@@ -15,6 +17,8 @@ import java.util.List;
 import static spark.Spark.port;
 
 public class TodoApplication {
+    private final static Logger logger = LoggerFactory.getLogger(TodoApplication.class);
+
     private static Sql2o sql2o;
     private static List<Controller> controllers = new ArrayList<>();
     private static DatabaseConfig databaseConfig;
@@ -26,10 +30,11 @@ public class TodoApplication {
         loadDatabaseConfig(options);
 
         initModules();
+        logger.info("Finished initialization");
     }
 
     private static void loadDatabaseConfig(CommandLineOptions options) {
-        databaseConfig = new DatabaseConfig(options.getDbUrl(), options.getDbUser(), options.getDbPassword());
+        databaseConfig = new DatabaseConfig(options.getDbUrl(), options.getDbUser(), options.getDbPass());
     }
 
     private static void setupControllers(Sql2o dbConnection) {

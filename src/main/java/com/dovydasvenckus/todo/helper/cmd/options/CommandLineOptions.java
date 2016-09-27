@@ -24,7 +24,7 @@ public class CommandLineOptions {
         return dbUser;
     }
 
-    public String getDbPassword() {
+    public String getDbPass() {
         return dbPassword;
     }
 
