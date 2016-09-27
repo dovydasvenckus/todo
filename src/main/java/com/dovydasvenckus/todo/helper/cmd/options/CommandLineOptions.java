@@ -3,11 +3,9 @@ package com.dovydasvenckus.todo.helper.cmd.options;
 import com.beust.jcommander.Parameter;
 
 public class CommandLineOptions {
-    @Parameter(names = {"--env"})
-    private String env;
 
-    @Parameter(names = {"--db-host"})
-    private String dbHost;
+    @Parameter(names = {"--db-url"})
+    private String dbUrl;
 
     @Parameter(names = {"--db-user"})
     private String dbUser;
@@ -18,8 +16,8 @@ public class CommandLineOptions {
     @Parameter(names = "--port")
     private String port;
 
-    public String getDbHost() {
-        return dbHost;
+    public String getDbUrl() {
+        return dbUrl;
     }
 
     public String getDbUser() {
@@ -32,9 +30,5 @@ public class CommandLineOptions {
 
     public String getPort() {
         return port;
-    }
-
-    public String getEnv() {
-        return env;
     }
 }

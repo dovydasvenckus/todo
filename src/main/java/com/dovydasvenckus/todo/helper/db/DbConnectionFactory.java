@@ -1,14 +1,14 @@
 package com.dovydasvenckus.todo.helper.db;
 
-import com.dovydasvenckus.todo.helper.cmd.options.CommandLineOptions;
 import org.sql2o.Sql2o;
 
 public class DbConnectionFactory {
 
-    public static Sql2o getInstance(CommandLineOptions options) {
+    public static Sql2o getInstance(DatabaseConfig databaseConfig) {
         Sql2o sql2o;
-        if (options.getDbHost() != null) {
-            sql2o = new Sql2o(options.getDbHost(), options.getDbUser(), options.getDbPassword());
+        if (databaseConfig.getUrl().isPresent()) {
+            String password = databaseConfig.getPassword().isPresent() ? databaseConfig.getPassword().get() : null;
+            sql2o = new Sql2o(databaseConfig.getUrl().get(), databaseConfig.getUsername().get(), password);
         } else {
             sql2o = new Sql2o("jdbc:hsqldb:mem:todoDb", "sa", "");
         }
