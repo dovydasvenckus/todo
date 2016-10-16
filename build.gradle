@@ -34,7 +34,9 @@ dependencies {
     testCompile 'junit:junit:4.12'
 }
 
-
+task wrapper(type: Wrapper) {
+    gradleVersion = '3.1'
+}
 
 task stage(dependsOn: ['clean', 'shadowJar'])
 shadowJar.mustRunAfter clean
