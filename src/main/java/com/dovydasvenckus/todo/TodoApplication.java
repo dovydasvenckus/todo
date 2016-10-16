@@ -3,8 +3,8 @@ package com.dovydasvenckus.todo;
 import com.beust.jcommander.JCommander;
 import com.dovydasvenckus.todo.helper.cmd.options.CommandLineOptions;
 import com.dovydasvenckus.todo.helper.db.DatabaseConfig;
-import com.dovydasvenckus.todo.helper.db.DbConnectionFactory;
-import com.dovydasvenckus.todo.helper.db.SqlFileExecutor;
+import com.dovydasvenckus.todo.helper.db.connector.DatabaseConnector;
+import com.dovydasvenckus.todo.helper.db.connector.DatabaseConnectorSelector;
 import com.dovydasvenckus.todo.todo.TodoController;
 import com.dovydasvenckus.todo.util.Controller;
 import org.slf4j.Logger;
@@ -19,6 +19,7 @@ import static spark.Spark.port;
 public class TodoApplication {
     private final static Logger logger = LoggerFactory.getLogger(TodoApplication.class);
 
+    private static DatabaseConnector databaseConnector;
     private static Sql2o sql2o;
     private static List<Controller> controllers = new ArrayList<>();
     private static DatabaseConfig databaseConfig;
@@ -43,17 +44,13 @@ public class TodoApplication {
     }
 
     private static void initModules() {
-        sql2o = DbConnectionFactory.getInstance(databaseConfig);
+        try {
+            databaseConnector = (new DatabaseConnectorSelector()).getConnectorInstance(databaseConfig);
+            sql2o = databaseConnector.getInstance(databaseConfig);
 
-        if (!databaseConfig.getUrl().isPresent()) {
-            createInMemoryTables();
+            setupControllers(sql2o);
+        } catch (ClassNotFoundException ex) {
+            logger.error("DatabaseDriverEnum connector driver not found", ex);
         }
-
-        setupControllers(sql2o);
-    }
-
-    private static void createInMemoryTables() {
-        SqlFileExecutor sqlFileExecutor = new SqlFileExecutor(sql2o);
-        sqlFileExecutor.execute("/sql/hsqldb/create.sql");
     }
 }
