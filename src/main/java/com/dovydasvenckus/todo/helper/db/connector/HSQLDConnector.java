@@ -4,8 +4,9 @@ import com.dovydasvenckus.todo.helper.db.DatabaseConfig;
 import com.dovydasvenckus.todo.helper.db.SqlFileExecutor;
 import org.sql2o.Sql2o;
 
-public class HSQLDConnector implements DatabaseConnector {
+public class HSQLDConnector extends DatabaseConnector {
     public HSQLDConnector() throws ClassNotFoundException {
+        super("org.hsqldb.jdbc.JDBCDriver");
         loadDriver();
     }
 
@@ -25,10 +26,6 @@ public class HSQLDConnector implements DatabaseConnector {
     private void createTables(Sql2o sql2o) {
         SqlFileExecutor sqlFileExecutor = new SqlFileExecutor(sql2o);
         sqlFileExecutor.execute("/sql/hsqldb/create.sql");
-    }
-
-    private void loadDriver() throws ClassNotFoundException {
-        Class.forName("org.hsqldb.jdbc.JDBCDriver");
     }
 
 }

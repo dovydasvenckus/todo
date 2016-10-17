@@ -3,9 +3,10 @@ package com.dovydasvenckus.todo.helper.db.connector;
 import com.dovydasvenckus.todo.helper.db.DatabaseConfig;
 import org.sql2o.Sql2o;
 
-public class PostgresqlConnector implements DatabaseConnector {
+public class PostgresqlConnector extends DatabaseConnector {
 
     public PostgresqlConnector() throws ClassNotFoundException {
+        super("org.postgresql.Driver");
         loadDriver();
     }
 
@@ -14,10 +15,6 @@ public class PostgresqlConnector implements DatabaseConnector {
         if (isDataConfigNotBlank(databaseConfig)) {
             return new Sql2o(databaseConfig.getUrl().get(), databaseConfig.getUsername().get(), databaseConfig.getPassword().get());
         } else throw new IllegalArgumentException("Missing database config parameters.");
-    }
-
-    private void loadDriver() throws ClassNotFoundException {
-        Class.forName("org.hsqldb.jdbc.JDBCDriver");
     }
 
     private boolean isDataConfigNotBlank(DatabaseConfig config) {
