@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import org.sql2o.Sql2o;
 import spark.Route;
 
+import static com.dovydasvenckus.todo.todo.TodoState.DONE;
+import static com.dovydasvenckus.todo.todo.TodoState.NOT_DONE;
 import static spark.Spark.*;
 
 public class TodoController implements Controller {
@@ -20,8 +22,9 @@ public class TodoController implements Controller {
 
     @Override
     public void setupRoutes() {
-        get(URL, "application/json", (request, response) -> todoService.getTodos(""), gson::toJson);
-        get(URL + "/active", "application/json", (request, response) -> todoService.getTodos("active"), gson::toJson);
+        get(URL, "application/json", (request, response) -> todoService.getTodos(null), gson::toJson);
+        get(URL + "/active", "application/json", (request, response) -> todoService.getTodos(NOT_DONE), gson::toJson);
+        get(URL + "/done", "application/json", (request, response) -> todoService.getTodos(DONE), gson::toJson);
         get(URL + "/:id", "application/json", findTodo(), gson::toJson);
         post(URL, "application/json", createTodo());
         post(URL + "/toggle/:id", "application/json", toggle());

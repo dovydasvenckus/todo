@@ -14,13 +14,13 @@ public class TodoService {
         this.todoRepository = new TodoRepositoryImpl(dbConnection);
     }
 
-    public List<Todo> getTodos(String status) {
+    public List<Todo> getTodos(TodoState state) {
         List<Todo> result;
-        switch (status) {
-            case "active":
+        switch (state) {
+            case NOT_DONE:
                 result = todoRepository.listActive();
                 break;
-            case "complete":
+            case DONE:
                 result = todoRepository.listDone();
                 break;
             default:
