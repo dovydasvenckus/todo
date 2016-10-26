@@ -14,19 +14,17 @@ public class TodoService {
         this.todoRepository = new TodoRepositoryImpl(dbConnection);
     }
 
-    public List<Todo> getTodos(TodoState state) {
-        List<Todo> result;
+    public List<Todo> getTodos(TodoStateFilter state) {
         switch (state) {
             case NOT_DONE:
-                result = todoRepository.listActive();
-                break;
+                return todoRepository.listActive();
             case DONE:
-                result = todoRepository.listDone();
-                break;
-            default:
-                result = todoRepository.listAll();
+                return todoRepository.listDone();
+            case ALL:
+                return todoRepository.listAll();
         }
-        return result;
+
+        throw new IllegalArgumentException();
     }
 
     public Optional<Todo> find(Long id) {
