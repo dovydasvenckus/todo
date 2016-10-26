@@ -21,6 +21,7 @@ public class TodoController implements Controller {
     @Override
     public void setupRoutes() {
         get(URL, "application/json", (request, response) -> todoService.getTodos(""), gson::toJson);
+        get(URL + "/active", "application/json", (request, response) -> todoService.getTodos("active"), gson::toJson);
         get(URL + "/:id", "application/json", findTodo(), gson::toJson);
         post(URL, "application/json", createTodo());
         post(URL + "/toggle/:id", "application/json", toggle());
