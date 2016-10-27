@@ -14,8 +14,8 @@ public class TodoService {
         this.todoRepository = new TodoRepositoryImpl(dbConnection);
     }
 
-    public List<Todo> getTodos(TodoStateFilter state) {
-        switch (state) {
+    public List<Todo> getTodos(TodoStateFilter filter) {
+        switch (filter) {
             case NOT_DONE:
                 return todoRepository.listActive();
             case DONE:
