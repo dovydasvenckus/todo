@@ -75,7 +75,8 @@ task installNpm(type: NpmTask) {
 
 task buildWeb(type: Exec) {
     workingDir webBuildDir
-    commandLine "$webBuildDir/node_modules/brunch/bin/brunch", 'build'
+
+    commandLine "$projectDir/.gradle/nodejs/node-v6.9.1-linux-x64/bin/node", "$webBuildDir/node_modules/brunch/bin/brunch", "build"
 }
 
 task copyWeb(type: Copy) {
