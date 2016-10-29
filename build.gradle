@@ -52,7 +52,7 @@ task cleanWeb(type: Delete) {
 task cloneWeb(type: com.palominolabs.gradle.task.git.clone.GitCloneTask) {
     dir = file(webBuildDir)
     uri = 'https://github.com/dovydasvenckus/todo-web.git'
-    treeish = 'origin/master' // a commit hash, or tag name, or branch name (with remote prefix, like 'origin/master')
+    treeish = 'origin/master'
 }
 
 task installNpm(type: NpmTask) {
