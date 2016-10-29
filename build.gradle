@@ -1,6 +1,8 @@
 apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'com.moowork.node'
+
 
 buildscript {
     repositories {
@@ -8,6 +10,8 @@ buildscript {
     }
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+        classpath 'com.palominolabs.gradle.task:gradle-git-clone-task:0.0.3'
+        classpath "com.moowork.gradle:gradle-node-plugin:0.13"
     }
 }
 
@@ -28,7 +32,7 @@ dependencies {
     compile 'org.hsqldb:hsqldb:2.3.4'
 
     compile 'com.beust:jcommander:1.48'
-    
+
     compile 'org.slf4j:slf4j-simple:1.7.21'
 
     testCompile 'junit:junit:4.12'
@@ -38,5 +42,54 @@ task wrapper(type: Wrapper) {
     gradleVersion = '3.1'
 }
 
-task stage(dependsOn: ['clean', 'shadowJar'])
-shadowJar.mustRunAfter clean
+def webBuildDir="$buildDir/todo-web"
+
+task cleanWeb(type: Delete) {
+    delete webBuildDir
+    followSymlinks = true
+}
+
+task cloneWeb(type: com.palominolabs.gradle.task.git.clone.GitCloneTask) {
+    dir = file(webBuildDir)
+    uri = 'https://github.com/dovydasvenckus/todo-web.git'
+    treeish = 'origin/master' // a commit hash, or tag name, or branch name (with remote prefix, like 'origin/master')
+}
+
+task installNpm(type: NpmTask) {
+    execOverrides {
+        it.workingDir = webBuildDir
+    }
+
+    args = ['install']
+
+    inputs.file { file("$webBuildDir/package.json") }
+    outputs.dir { file("$webBuildDir/node_modules") }
+
+}
+
+task buildWeb(type: Exec) {
+    workingDir webBuildDir
+    commandLine "$webBuildDir/node_modules/brunch/bin/brunch", 'build'
+}
+
+task copyWeb(type: Copy) {
+    from "$webBuildDir/public"
+    into "src/main/resources/public"
+}
+
+task stage{
+    dependsOn 'clean'
+    dependsOn 'cleanWeb'
+    dependsOn 'cloneWeb'
+    dependsOn 'installNpm'
+    dependsOn 'buildWeb'
+    dependsOn 'copyWeb'
+    dependsOn 'shadowJar'
+
+    tasks.findByName('cleanWeb').mustRunAfter 'clean'
+    tasks.findByName('cloneWeb').mustRunAfter 'cleanWeb'
+    tasks.findByName('installNpm').mustRunAfter 'cloneWeb'
+    tasks.findByName('buildWeb').mustRunAfter 'installNpm'
+    tasks.findByName('copyWeb').mustRunAfter 'buildWeb'
+    tasks.findByName('shadowJar').mustRunAfter 'copyWeb'
+}

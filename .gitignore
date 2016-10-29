@@ -17,3 +17,7 @@ hs_err_pid*
 
 # gradle
 .gradle
+
+src/main/resources/public/*.js
+src/main/resources/public/*.map
+src/main/resources/public/index.html
