@@ -14,8 +14,8 @@ import org.sql2o.Sql2o;
 import java.util.ArrayList;
 import java.util.List;
 
-import static spark.Spark.before;
 import static spark.Spark.port;
+import static spark.Spark.staticFiles;
 
 public class TodoApplication {
     private final static Logger logger = LoggerFactory.getLogger(TodoApplication.class);
@@ -31,6 +31,7 @@ public class TodoApplication {
         port(options.getPort() != null ? new Integer(options.getPort()) : 8080);
         loadDatabaseConfig(options);
 
+        staticFiles.location("/public");
         initModules();
         logger.info("Finished initialization");
     }
@@ -53,15 +54,6 @@ public class TodoApplication {
         } catch (ClassNotFoundException ex) {
             logger.error("DatabaseDriverEnum connector driver not found", ex);
         }
-    }
-
-    private static void enableCORS(final String origin, final String methods, final String headers) {
-        before((request, response) -> {
-            response.header("Access-Control-Allow-Origin", origin);
-            response.header("Access-Control-Request-Method", methods);
-            response.header("Access-Control-Allow-Headers", headers);
-
-        });
     }
 
 }
