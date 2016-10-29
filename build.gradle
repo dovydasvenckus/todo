@@ -44,6 +44,12 @@ task wrapper(type: Wrapper) {
 
 def webBuildDir="$buildDir/todo-web"
 
+node {
+    version = '6.9.1'
+    npmVersion = '3.10.9'
+    download = true
+}
+
 task cleanWeb(type: Delete) {
     delete webBuildDir
     followSymlinks = true
