@@ -26,6 +26,11 @@ public class TodoController implements Controller {
         post(URL, "application/json", createTodo());
         post(URL + "/toggle/:id", "application/json", toggle());
         delete(URL + "/:id", "application/json", deleteTodo());
+        options(URL, ((request, response) -> {
+            response.header("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE");
+            response.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+            return "OK";
+        }));
     }
 
     private Route findTodo() {
