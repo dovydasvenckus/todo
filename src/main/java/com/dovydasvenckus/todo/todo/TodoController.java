@@ -5,6 +5,8 @@ import com.google.gson.Gson;
 import org.sql2o.Sql2o;
 import spark.Route;
 
+import java.util.Optional;
+
 import static spark.Spark.*;
 
 public class TodoController implements Controller {
@@ -48,8 +50,10 @@ public class TodoController implements Controller {
     private Route createTodo() {
         return (request, response) -> {
             CreateTodoDto todo = gson.fromJson(request.body(), CreateTodoDto.class);
-            if (todoService.create(todo).isPresent()) {
+            Optional<Todo> createdTodo = todoService.create(todo);
+            if (createdTodo.isPresent()) {
                 response.status(201);
+                response.header("location", URL + "/" + createdTodo.get().getId());
             } else response.status(400);
             return "";
         };
