@@ -81,7 +81,7 @@ task buildWeb(type: Exec) {
     def nodeBinPath = "$nodeRoot/${downloadedNodeVersion ?: 'node-v6.9.1-linux-x64'}/bin/node"
 
     workingDir webBuildDir
-    commandLine "$projectDir/$nodeBinPath", "$webBuildDir/node_modules/brunch/bin/brunch", 'build'
+    commandLine "$projectDir/$nodeBinPath", "$webBuildDir/node_modules/brunch/bin/brunch", 'build', '-e', 'production'
 }
 
 task copyWeb(type: Copy) {
