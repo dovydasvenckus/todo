@@ -12,9 +12,9 @@ import static spark.Spark.*;
 public class TodoController implements Controller {
     private static String URL = "/api/todo";
 
-    protected final Gson gson = new Gson();
+    private final Gson gson = new Gson();
 
-    protected final TodoService todoService;
+    private final TodoService todoService;
 
     public TodoController(Sql2o dbConnection) {
         this.todoService = new TodoService(dbConnection);
@@ -22,8 +22,7 @@ public class TodoController implements Controller {
 
     @Override
     public void setupRoutes() {
-        get(URL, "application/json", (request, response) -> todoService
-                .getTodos(TodoStateFilter.getStateFilter(request.queryParams("done"))), gson::toJson);
+        get(URL, "application/json",  listTodos(), gson::toJson);
         get(URL + "/:id", "application/json", findTodo(), gson::toJson);
         post(URL, "application/json", createTodo());
         post(URL + "/toggle/:id", "application/json", toggle());
@@ -35,9 +34,18 @@ public class TodoController implements Controller {
         }));
     }
 
+    private Route listTodos() {
+        return (request, response) -> {
+            response.header("Content-Encoding", "gzip");
+            return todoService
+                    .getTodos(TodoStateFilter.getStateFilter(request.queryParams("done")));
+        };
+    }
+
     private Route findTodo() {
         return (request, response) -> {
             try {
+                response.header("Content-Encoding", "gzip");
                 Long id = Long.parseLong(request.params(":id"));
                 return todoService.find(id);
             } catch (NumberFormatException nfe) {
