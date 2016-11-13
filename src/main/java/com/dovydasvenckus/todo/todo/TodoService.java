@@ -22,9 +22,9 @@ public class TodoService {
                 return todoRepository.listDone();
             case ALL:
                 return todoRepository.listAll();
+            default:
+                throw new IllegalArgumentException();
         }
-
-        throw new IllegalArgumentException();
     }
 
     public Optional<Todo> find(Long id) {

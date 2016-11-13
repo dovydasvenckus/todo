@@ -1,6 +1,7 @@
 import java.nio.file.Paths
 
 apply plugin: 'java'
+apply plugin: 'groovy'
 apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
 apply plugin: 'com.moowork.node'
@@ -37,7 +38,10 @@ dependencies {
 
     compile 'org.slf4j:slf4j-simple:1.7.21'
 
-    testCompile 'junit:junit:4.12'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testRuntime 'cglib:cglib-nodep:3.1'
+    testRuntime 'org.objenesis:objenesis:2.1'
+    testRuntime 'com.athaydes:spock-reports:1.2.10'
 }
 
 task wrapper(type: Wrapper) {
