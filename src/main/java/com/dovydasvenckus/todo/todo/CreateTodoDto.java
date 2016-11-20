@@ -1,7 +1,7 @@
 package com.dovydasvenckus.todo.todo;
 
 public class CreateTodoDto {
-    String title;
+    private String title;
 
     public String getTitle() {
         return title;

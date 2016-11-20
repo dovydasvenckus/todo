@@ -22,7 +22,7 @@ public class TodoController implements Controller {
 
     @Override
     public void setupRoutes() {
-        get(URL, "application/json",  listTodos(), gson::toJson);
+        get(URL, "application/json", listTodos(), gson::toJson);
         get(URL + "/:id", "application/json", findTodo(), gson::toJson);
         post(URL, "application/json", createTodo());
         post(URL + "/toggle/:id", "application/json", toggle());
@@ -62,6 +62,7 @@ public class TodoController implements Controller {
             if (createdTodo.isPresent()) {
                 response.status(201);
                 response.header("location", URL + "/" + createdTodo.get().getId());
+                response.type("text/plain");
             } else response.status(400);
             return "";
         };
