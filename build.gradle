@@ -32,7 +32,6 @@ dependencies {
 
     compile 'org.sql2o:sql2o:1.5.4'
     compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
-    compile 'org.hsqldb:hsqldb:2.3.4'
 
     compile 'com.beust:jcommander:1.48'
 
@@ -42,6 +41,11 @@ dependencies {
     testRuntime 'cglib:cglib-nodep:3.1'
     testRuntime 'org.objenesis:objenesis:2.1'
     testRuntime 'com.athaydes:spock-reports:1.2.10'
+
+    //Excluding HSQLDB from stage task
+    if (project.gradle.startParameter.taskNames[0] != 'stage') {
+        compile 'org.hsqldb:hsqldb:2.3.4'
+    }
 }
 
 task wrapper(type: Wrapper) {
