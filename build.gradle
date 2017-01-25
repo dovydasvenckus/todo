@@ -29,6 +29,7 @@ dependencies {
     compile 'com.sparkjava:spark-core:2.5'
 
     compile 'com.google.code.gson:gson:2.7'
+    compile 'com.google.guava:guava:21.0'
 
     compile 'org.sql2o:sql2o:1.5.4'
     compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
