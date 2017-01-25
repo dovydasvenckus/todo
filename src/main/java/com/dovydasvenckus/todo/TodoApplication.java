@@ -1,6 +1,7 @@
 package com.dovydasvenckus.todo;
 
 import com.beust.jcommander.JCommander;
+import com.dovydasvenckus.todo.auth.AuthController;
 import com.dovydasvenckus.todo.auth.AuthService;
 import com.dovydasvenckus.todo.helper.cmd.options.CommandLineOptions;
 import com.dovydasvenckus.todo.helper.db.DatabaseConfig;
@@ -44,6 +45,7 @@ public class TodoApplication {
 
     private static void setupControllers(Sql2o dbConnection) {
         controllers.add(new TodoController(dbConnection));
+        controllers.add(new AuthController(authService));
         controllers.forEach(Controller::setupRoutes);
     }
 
