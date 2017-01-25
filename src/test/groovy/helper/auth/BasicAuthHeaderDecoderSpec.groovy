@@ -24,7 +24,17 @@ class BasicAuthHeaderDecoderSpec extends Specification {
             IllegalArgumentException ex = thrown()
             ex.message == "Header should start with 'Basic' keyword"
         where:
-            wrongHeader << ['bXl1c2VybmFtZTp0ZXN0', 'Basic', 'Basic   ']
+            wrongHeader << ['bXl1c2VybmFtZTp0ZXN0', 'test', '   bXl1c2VybmFtZTp0ZXN0     ']
+    }
+
+    def "should not decode header with misused 'Basic' keyword"() {
+        when:
+            decode(wrongHeader)
+        then:
+            IllegalArgumentException ex = thrown()
+            ex.message == "Header should start with 'Basic' keyword"
+        where:
+            wrongHeader << ['Basic ', 'Basic : bXl1c2VybmFtZTp0ZXN0', 'bXl1c2VybmFtZTp0ZXN0 Basic']
     }
 
     def 'should decode correct header'() {
