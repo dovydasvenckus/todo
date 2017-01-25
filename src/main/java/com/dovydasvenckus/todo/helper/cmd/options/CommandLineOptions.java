@@ -16,6 +16,12 @@ public class CommandLineOptions {
     @Parameter(names = "--port")
     private String port;
 
+    @Parameter(names = "--app-user")
+    private String user;
+
+    @Parameter(names = "--app-pass")
+    private String password;
+
     public String getDbUrl() {
         return dbUrl;
     }
@@ -30,5 +36,13 @@ public class CommandLineOptions {
 
     public String getPort() {
         return port;
+    }
+
+    public String getUser() {
+        return user;
+    }
+
+    public String getPassword() {
+        return password;
     }
 }

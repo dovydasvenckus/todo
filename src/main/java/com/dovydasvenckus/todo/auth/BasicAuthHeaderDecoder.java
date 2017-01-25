@@ -25,7 +25,7 @@ public class BasicAuthHeaderDecoder {
     }
 
     private static boolean isValidAuthHeaderStructure(String header) {
-        return header.indexOf("Basic ") == 0 && header.split(" ").length == 2;
+        return header.startsWith("Basic ") && header.split(" ").length == 2;
     }
 
     private static int countColons(String string) {
