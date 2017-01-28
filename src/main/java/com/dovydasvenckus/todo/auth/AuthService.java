@@ -1,14 +1,17 @@
 package com.dovydasvenckus.todo.auth;
 
-import com.dovydasvenckus.todo.helper.auth.UsernamePasswordPair;
+import org.pac4j.core.context.WebContext;
+import org.pac4j.core.credentials.UsernamePasswordCredentials;
+import org.pac4j.core.credentials.authenticator.Authenticator;
+import org.pac4j.core.exception.CredentialsException;
+import org.pac4j.core.exception.HttpAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import spark.Request;
 
 import static com.google.common.base.Preconditions.checkArgument;
 import static com.google.common.base.Strings.isNullOrEmpty;
 
-public class AuthService {
+public class AuthService implements Authenticator<UsernamePasswordCredentials> {
     private final static Logger logger = LoggerFactory.getLogger(AuthService.class);
     private String username;
     private String password;
@@ -20,13 +23,12 @@ public class AuthService {
         this.password = password;
     }
 
-    public boolean isAuthorized(Request request) {
-        try {
-            UsernamePasswordPair credentials = BasicAuthHeaderDecoder.decode(request.headers("Authorization"));
-            return username.equalsIgnoreCase(credentials.getUsername()) && password.equals(credentials.getPassword());
-        } catch (RuntimeException ex) {
-            logger.info("User failed to log in due to exception {}", ex.toString());
-            return false;
+    @Override
+    public void validate(UsernamePasswordCredentials credentials, WebContext context) throws HttpAction {
+        if (username.equalsIgnoreCase(credentials.getUsername()) && password.equals(credentials.getPassword())) {
+            logger.info("Successful authentication");
+        } else {
+            throw new CredentialsException("Wrong username or password");
         }
     }
 }

@@ -1,7 +1,7 @@
 package com.dovydasvenckus.todo;
 
 import com.beust.jcommander.JCommander;
-import com.dovydasvenckus.todo.auth.AuthController;
+import com.dovydasvenckus.todo.auth.AuthConfigFactory;
 import com.dovydasvenckus.todo.auth.AuthService;
 import com.dovydasvenckus.todo.helper.cmd.options.CommandLineOptions;
 import com.dovydasvenckus.todo.helper.db.DatabaseConfig;
@@ -9,6 +9,8 @@ import com.dovydasvenckus.todo.helper.db.connector.DatabaseConnector;
 import com.dovydasvenckus.todo.helper.db.connector.DatabaseConnectorSelector;
 import com.dovydasvenckus.todo.todo.TodoController;
 import com.dovydasvenckus.todo.util.Controller;
+import org.pac4j.core.config.Config;
+import org.pac4j.sparkjava.SecurityFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sql2o.Sql2o;
@@ -26,6 +28,7 @@ public class TodoApplication {
     private static List<Controller> controllers = new ArrayList<>();
     private static DatabaseConfig databaseConfig;
     private static AuthService authService;
+    private static Config config;
 
     public static void main(String[] args) {
         CommandLineOptions options = new CommandLineOptions();
@@ -34,7 +37,7 @@ public class TodoApplication {
         loadDatabaseConfig(options);
 
         staticFiles.location("/public");
-        setupSecurityFilter(options);
+        setupSecurityFilters(options);
         initModules();
         logger.info("Finished initialization");
     }
@@ -45,20 +48,14 @@ public class TodoApplication {
 
     private static void setupControllers(Sql2o dbConnection) {
         controllers.add(new TodoController(dbConnection));
-        controllers.add(new AuthController(authService));
         controllers.forEach(Controller::setupRoutes);
     }
 
-    private static void setupSecurityFilter(CommandLineOptions options) {
-        if (options.getUser() != null && options.getPassword() != null) {
-            authService = new AuthService(options.getUser(), options.getPassword());
+    private static void setupSecurityFilters(CommandLineOptions options) {
+        authService = new AuthService(options.getUser(), options.getPassword());
+        config = new AuthConfigFactory(authService).build();
 
-            before((request, response) -> {
-                if (request.uri().startsWith("/api/") && !authService.isAuthorized(request)) {
-                    halt(401, "Not authorized");
-                }
-            });
-        }
+        before("/api/*", new SecurityFilter(config, "directBasicAuthClient", "dumbAuthorizer"));
     }
 
     private static void initModules() {
