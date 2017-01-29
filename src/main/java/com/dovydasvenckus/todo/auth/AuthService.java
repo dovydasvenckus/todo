@@ -25,10 +25,14 @@ public class AuthService implements Authenticator<UsernamePasswordCredentials> {
 
     @Override
     public void validate(UsernamePasswordCredentials credentials, WebContext context) throws HttpAction {
-        if (username.equalsIgnoreCase(credentials.getUsername()) && password.equals(credentials.getPassword())) {
-            logger.info("Successful authentication");
-        } else {
+        if (!isCredentialsValid(credentials)) {
+            logger.info("Wrong username or password. For user: {}", credentials.getUsername());
             throw new CredentialsException("Wrong username or password");
         }
+    }
+
+    private boolean isCredentialsValid(UsernamePasswordCredentials credentials) {
+        return username.equalsIgnoreCase(credentials.getUsername())
+                && password.equals(credentials.getPassword());
     }
 }
