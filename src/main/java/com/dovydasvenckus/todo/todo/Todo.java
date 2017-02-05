@@ -6,15 +6,26 @@ import java.util.Objects;
 public class Todo {
 
     private Long id;
+
     private String title;
+
     private boolean isDone = false;
+
+    private Long todoListId;
+
     private Date createdAt;
+
     private Date updatedAt;
 
     public Todo(String title) {
         this.title = title;
         this.createdAt = new Date();
         this.updatedAt = new Date();
+    }
+
+    public Todo(String title, Long todoListId) {
+        this(title);
+        this.todoListId = todoListId;
     }
 
     public Long getId() {
@@ -60,6 +71,14 @@ public class Todo {
 
     public void setCreatedAt(Date createdAt) {
         this.createdAt = createdAt;
+    }
+
+    public Long getTodoListId() {
+        return todoListId;
+    }
+
+    public void setTodoListId(Long todoListId) {
+        this.todoListId = todoListId;
     }
 
     @Override

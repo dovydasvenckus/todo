@@ -2,7 +2,6 @@ package com.dovydasvenckus.todo.todo;
 
 import com.dovydasvenckus.todo.util.Controller;
 import com.google.gson.Gson;
-import org.sql2o.Sql2o;
 import spark.Route;
 
 import java.util.Optional;
@@ -16,8 +15,8 @@ public class TodoController implements Controller {
 
     private final TodoService todoService;
 
-    public TodoController(Sql2o dbConnection) {
-        this.todoService = new TodoService(dbConnection);
+    public TodoController(TodoService todoService) {
+        this.todoService = todoService;
     }
 
     @Override
@@ -58,6 +57,7 @@ public class TodoController implements Controller {
     private Route createTodo() {
         return (request, response) -> {
             CreateTodoDto todo = gson.fromJson(request.body(), CreateTodoDto.class);
+
             Optional<Todo> createdTodo = todoService.create(todo);
             if (createdTodo.isPresent()) {
                 response.status(201);

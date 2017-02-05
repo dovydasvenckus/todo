@@ -20,6 +20,7 @@ public class TodoRepositoryImpl implements TodoRepository {
         columnMap = new HashMap<>();
         columnMap.put("todo_id", "id");
         columnMap.put("is_done", "isDone");
+        columnMap.put("list_id", "todoListId");
         columnMap.put("created_at", "createdAt");
         columnMap.put("updated_at", "updatedAt");
 
@@ -95,9 +96,10 @@ public class TodoRepositoryImpl implements TodoRepository {
     @Override
     public void add(Todo todo) {
         try (Connection conn = sql2o.open()) {
-            Long id = conn.createQuery("INSERT INTO todo(title, is_done, created_at, updated_at) " +
-                    "VALUES (:title, :done, :created, :updated)", true)
+            Long id = conn.createQuery("INSERT INTO todo(title, list_id, is_done, created_at, updated_at) " +
+                    "VALUES (:title, :list_id, :done, :created, :updated)", true)
                     .addParameter("title", todo.getTitle())
+                    .addParameter("list_id", todo.getTodoListId())
                     .addParameter("done", todo.getIsDone())
                     .addParameter("created", todo.getCreatedAt())
                     .addParameter("updated", todo.getUpdatedAt())
