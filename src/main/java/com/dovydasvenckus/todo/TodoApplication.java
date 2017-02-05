@@ -55,12 +55,12 @@ public class TodoApplication {
     }
 
     private static void addService(Service service) {
-        if (!findServiceByName(service.getName()).isPresent()){
+        if (!findServiceByName(service.getName()).isPresent()) {
             services.add(service);
         }
     }
 
-    private static Optional<Service> findServiceByName(String name)  {
+    private static Optional<Service> findServiceByName(String name) {
         return services.stream()
                 .filter(service -> service.getName().equals(name))
                 .findAny();
@@ -73,7 +73,9 @@ public class TodoApplication {
 
     private static void setupControllers() {
         controllers.add(new TodoController((TodoService) findServiceByName("TodoService").get()));
-        controllers.add(new TodoListController((TodoListService) findServiceByName("TodoListService").get()));
+        controllers.add(new TodoListController(
+                (TodoListService) findServiceByName("TodoListService").get(),
+                (TodoService) findServiceByName("TodoService").get()));
         controllers.forEach(Controller::setupRoutes);
     }
 

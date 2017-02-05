@@ -4,6 +4,7 @@ import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -41,6 +42,14 @@ public class TodoListRepositoryImpl implements TodoListRepository {
     @Override
     public Optional<TodoList> findInbox() {
         return findById(1L);
+    }
+
+    @Override
+    public List<TodoList> listAll() {
+        try (Connection connection = sql2o.open()) {
+            return connection.createQuery("SELECT * FROM list")
+                    .executeAndFetch(TodoList.class);
+        }
     }
 
     @Override

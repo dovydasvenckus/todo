@@ -32,6 +32,10 @@ public class TodoService implements Service {
         }
     }
 
+    public List<Todo> getFromList(TodoList todoList) {
+        return todoRepository.list(todoList);
+    }
+
     public Optional<Todo> find(Long id) {
         return todoRepository.find(id);
     }

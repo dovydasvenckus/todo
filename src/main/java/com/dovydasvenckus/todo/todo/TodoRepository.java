@@ -1,5 +1,7 @@
 package com.dovydasvenckus.todo.todo;
 
+import com.dovydasvenckus.todo.list.TodoList;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -11,6 +13,8 @@ public interface TodoRepository{
     List<Todo> listDone();
 
     List<Todo> listActive();
+
+    List<Todo> list(TodoList todoList);
 
     Long count(Optional<Boolean> isDone);
 

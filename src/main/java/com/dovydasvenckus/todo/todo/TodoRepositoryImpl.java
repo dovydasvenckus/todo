@@ -1,5 +1,6 @@
 package com.dovydasvenckus.todo.todo;
 
+import com.dovydasvenckus.todo.list.TodoList;
 import org.sql2o.Connection;
 import org.sql2o.Query;
 import org.sql2o.Sql2o;
@@ -52,6 +53,15 @@ public class TodoRepositoryImpl implements TodoRepository {
         try (Connection conn = sql2o.open()) {
             return conn
                     .createQuery("SELECT * FROM todo WHERE is_done = TRUE")
+                    .executeAndFetch(Todo.class);
+        }
+    }
+
+    @Override
+    public List<Todo> list(TodoList todoList) {
+        try (Connection connection = sql2o.open()) {
+            return connection.createQuery("SELECT * FROM todo WHERE list_id = :list_id")
+                    .addParameter("list_id", todoList.getId())
                     .executeAndFetch(Todo.class);
         }
     }
