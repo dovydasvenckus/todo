@@ -70,7 +70,8 @@ public class TodoRepositoryImpl implements TodoRepository {
     public List<Todo> listActive() {
         try (Connection conn = sql2o.open()) {
             return conn
-                    .createQuery("SELECT * FROM todo WHERE is_done = FALSE")
+                    .createQuery("SELECT * FROM todo WHERE list_id = :list_id is_done = FALSE")
+                    .addParameter("list_id", 1)
                     .executeAndFetch(Todo.class);
         }
     }
