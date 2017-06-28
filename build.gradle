@@ -116,3 +116,7 @@ task stage{
     tasks.findByName('copyWeb').mustRunAfter 'buildWeb'
     tasks.findByName('shadowJar').mustRunAfter 'copyWeb'
 }
+
+task stageWithEmbeddedDb {
+    dependsOn 'stage'
+}

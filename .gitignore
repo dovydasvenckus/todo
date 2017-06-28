@@ -18,6 +18,9 @@ hs_err_pid*
 # gradle
 .gradle
 
+# Do not exclude gradle wrapper
+!gradle/wrapper/*
+
 src/main/resources/public/*.js
 src/main/resources/public/*.css
 src/main/resources/public/*.map

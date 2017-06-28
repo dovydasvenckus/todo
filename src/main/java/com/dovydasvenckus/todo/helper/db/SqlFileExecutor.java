@@ -1,5 +1,7 @@
 package com.dovydasvenckus.todo.helper.db;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sql2o.Connection;
 import org.sql2o.Sql2o;
 
@@ -11,6 +13,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class SqlFileExecutor {
+    private final static Logger logger = LoggerFactory.getLogger(SqlFileExecutor.class);
+
     private Sql2o sql2o;
 
     public SqlFileExecutor(Sql2o sql2o) {
@@ -21,10 +25,14 @@ public class SqlFileExecutor {
         String sqlScript = readSqlScript(fileName);
         List<String> statements = new ArrayList<>(Arrays.asList(sqlScript.split(";")));
 
+
         try (Connection con = sql2o.beginTransaction()) {
-            statements.forEach(statement ->
-                    con.createQuery(statement)
-                            .executeUpdate());
+            statements.forEach(statement -> {
+                logger.info("Executing SQL command: " + statement);
+                con.createQuery(statement)
+                        .executeUpdate();
+            });
+
         }
     }
 

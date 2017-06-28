@@ -70,8 +70,7 @@ public class TodoRepositoryImpl implements TodoRepository {
     public List<Todo> listActive() {
         try (Connection conn = sql2o.open()) {
             return conn
-                    .createQuery("SELECT * FROM todo WHERE list_id = :list_id AND is_done = FALSE")
-                    .addParameter("list_id", 1)
+                    .createQuery("SELECT * FROM todo WHERE is_done = FALSE")
                     .executeAndFetch(Todo.class);
         }
     }
@@ -80,14 +79,10 @@ public class TodoRepositoryImpl implements TodoRepository {
     public Long count(Optional<Boolean> isDone) {
         String sql = "SELECT COUNT (todo_id) FROM todo ";
         try (Connection con = sql2o.open()) {
-            if (isDone.isPresent()) {
-                return con.createQuery(sql + " WHERE is_done = :done")
-                        .addParameter("done", isDone.get() ? "TRUE" : "FALSE")
-                        .executeScalar(Long.class);
-            } else {
-                return con.createQuery(sql)
-                        .executeScalar(Long.class);
-            }
+            return isDone.map(aBoolean -> con.createQuery(sql + " WHERE is_done = :done")
+                    .addParameter("done", aBoolean ? "TRUE" : "FALSE")
+                    .executeScalar(Long.class))
+                    .orElseGet(() -> con.createQuery(sql).executeScalar(Long.class));
         }
 
     }
