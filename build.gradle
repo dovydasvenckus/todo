@@ -45,9 +45,9 @@ dependencies {
     testRuntime 'org.objenesis:objenesis:2.1'
     testRuntime 'com.athaydes:spock-reports:1.2.10'
 
-    //Excluding HSQLDB from stage task
+    //Excluding H2 from stage task
     if (project.gradle.startParameter.taskNames[0] != 'stage') {
-        compile 'org.hsqldb:hsqldb:2.3.4'
+        compile 'com.h2database:h2:1.4.196'
     }
 }
 

@@ -18,5 +18,3 @@ CREATE TABLE todo (
   updated_at TIMESTAMP,
   FOREIGN KEY(list_id) REFERENCES list(list_id)
 );
-
-INSERT INTO list VALUES (1, 'Inbox', CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

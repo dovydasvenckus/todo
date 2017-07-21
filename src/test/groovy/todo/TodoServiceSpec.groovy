@@ -1,5 +1,6 @@
 package todo
 
+import com.dovydasvenckus.todo.list.TodoListService
 import com.dovydasvenckus.todo.todo.Todo
 import com.dovydasvenckus.todo.todo.TodoRepository
 import com.dovydasvenckus.todo.todo.TodoService
@@ -14,7 +15,8 @@ import static com.dovydasvenckus.todo.todo.TodoStateFilter.NOT_DONE
 class TodoServiceSpec extends Specification {
     def sql2o = Stub(Sql2o)
     def todoRepository = Stub(TodoRepository)
-    def todoService = new TodoService(sql2o)
+    def todoListServiceStub = Stub(TodoListService)
+    def todoService = new TodoService(sql2o, todoListServiceStub)
 
     def setup() {
         todoService.todoRepository = todoRepository

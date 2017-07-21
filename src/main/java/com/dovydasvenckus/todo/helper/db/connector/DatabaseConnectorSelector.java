@@ -16,6 +16,6 @@ public class DatabaseConnectorSelector {
                     .orElseThrow(() -> new IllegalArgumentException("JDBC contains unknown driver"));
             return driverUsedInJdbcUrl.getConnector();
         }
-        return new HSQLDConnector();
+        return new H2Connector();
     }
 }

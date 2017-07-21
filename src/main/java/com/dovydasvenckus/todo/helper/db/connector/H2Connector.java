@@ -4,12 +4,12 @@ import com.dovydasvenckus.todo.helper.db.DatabaseConfig;
 import com.dovydasvenckus.todo.helper.db.SqlFileExecutor;
 import org.sql2o.Sql2o;
 
-public class HSQLDConnector extends DatabaseConnector {
+public class H2Connector extends DatabaseConnector {
 
     private static boolean inMemoryDBInitialized = false;
 
-    public HSQLDConnector() throws ClassNotFoundException {
-        super("org.hsqldb.jdbc.JDBCDriver");
+    public H2Connector() throws ClassNotFoundException {
+        super("org.h2.Driver");
         loadDriver();
     }
 
@@ -44,12 +44,13 @@ public class HSQLDConnector extends DatabaseConnector {
     }
 
     private Sql2o createInMemoryDB() {
-        return new Sql2o("jdbc:hsqldb:mem:todoDb", "sa", "");
+        return new Sql2o("jdbc:h2:mem:todo;DB_CLOSE_DELAY=-1;", "sa", "");
     }
 
     private void createTables(Sql2o sql2o) {
         SqlFileExecutor sqlFileExecutor = new SqlFileExecutor(sql2o);
         sqlFileExecutor.execute("/sql/hsqldb/create.sql");
+        sqlFileExecutor.execute("/sql/hsqldb/seed.sql");
     }
 
 }

@@ -26,7 +26,7 @@ public class SqlFileExecutor {
         List<String> statements = new ArrayList<>(Arrays.asList(sqlScript.split(";")));
 
 
-        try (Connection con = sql2o.beginTransaction()) {
+        try (Connection con = sql2o.open()) {
             statements.forEach(statement -> {
                 logger.info("Executing SQL command: " + statement);
                 con.createQuery(statement)

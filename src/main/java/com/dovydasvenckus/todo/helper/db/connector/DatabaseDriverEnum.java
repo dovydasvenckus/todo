@@ -1,7 +1,7 @@
 package com.dovydasvenckus.todo.helper.db.connector;
 
 enum DatabaseDriverEnum {
-    HSQLD("hsqldb"),
+    H2("h2"),
     POSTGRESQL("postgresql");
 
     private final String driverName;
@@ -21,8 +21,8 @@ enum DatabaseDriverEnum {
 
     public DatabaseConnector getConnector() throws ClassNotFoundException {
         switch (this) {
-            case HSQLD:
-                return new HSQLDConnector();
+            case H2:
+                return new H2Connector();
             case POSTGRESQL:
                 return new PostgresqlConnector();
         }
