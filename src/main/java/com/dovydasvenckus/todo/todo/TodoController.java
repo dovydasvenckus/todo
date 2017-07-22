@@ -59,6 +59,7 @@ public class TodoController implements Controller {
             CreateTodoDto todo = gson.fromJson(request.body(), CreateTodoDto.class);
 
             Optional<Todo> createdTodo = todoService.create(todo);
+
             if (createdTodo.isPresent()) {
                 response.status(201);
                 response.header("location", URL + "/" + createdTodo.get().getId());

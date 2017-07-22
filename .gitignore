@@ -14,6 +14,7 @@ hs_err_pid*
 
 #Ide
 .idea
+*.iml
 
 # gradle
 .gradle
@@ -22,6 +23,6 @@ hs_err_pid*
 !gradle/wrapper/*
 
 src/main/resources/public/*.js
-src/main/resources/public/*.css
+src/main/resources/**/*.css
 src/main/resources/public/*.map
 src/main/resources/public/index.html
