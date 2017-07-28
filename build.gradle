@@ -10,9 +10,11 @@ apply plugin: 'com.moowork.node'
 buildscript {
     repositories {
         jcenter()
+        mavenCentral()
     }
+
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.3'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.1'
         classpath 'com.palominolabs.gradle.task:gradle-git-clone-task:0.0.3'
         classpath "com.moowork.gradle:gradle-node-plugin:0.13"
     }
@@ -26,23 +28,23 @@ repositories {
 }
 
 dependencies {
-    compile 'com.sparkjava:spark-core:2.5'
+    compile 'com.sparkjava:spark-core:2.6.0'
 
-    compile 'com.google.code.gson:gson:2.7'
-    compile 'org.pac4j:spark-pac4j:1.2.3'
-    compile 'org.pac4j:pac4j-http:1.9.5'
+    compile 'com.google.code.gson:gson:2.8.1'
+    compile 'org.pac4j:spark-pac4j:2.0.0'
+    compile 'org.pac4j:pac4j-http:2.1.0'
 
     compile 'org.sql2o:sql2o:1.5.4'
     compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
 
-    compile 'com.beust:jcommander:1.48'
+    compile 'com.beust:jcommander:1.72'
 
-    compile 'org.slf4j:slf4j-simple:1.7.21'
+    compile 'org.slf4j:slf4j-simple:1.7.25'
 
-    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
-    testRuntime 'cglib:cglib-nodep:3.1'
-    testRuntime 'org.objenesis:objenesis:2.1'
-    testRuntime 'com.athaydes:spock-reports:1.2.10'
+    testCompile 'org.spockframework:spock-core:1.1-groovy-2.4'
+    testRuntime 'cglib:cglib-nodep:3.2.5'
+    testRuntime 'org.objenesis:objenesis:2.6'
+    testRuntime 'com.athaydes:spock-reports:1.3.1'
 
     //Excluding H2 from stage task
     if (project.gradle.startParameter.taskNames[0] != 'stage') {
