@@ -15,7 +15,7 @@ public class AuthConfigFactory implements ConfigFactory {
     }
 
     @Override
-    public Config build() {
+    public Config build(Object... params) {
         DirectBasicAuthClient directBasicAuthClient = new DirectBasicAuthClient(authService, new DumbProfileCreator());
         Clients clients = new Clients(directBasicAuthClient);
 
