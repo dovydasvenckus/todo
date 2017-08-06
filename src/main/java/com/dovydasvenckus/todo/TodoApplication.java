@@ -18,6 +18,7 @@ import org.pac4j.sparkjava.SecurityFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.sql2o.Sql2o;
+import org.sql2o.Sql2oException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,11 +90,20 @@ public class TodoApplication {
     private static void initModules() {
         try {
             databaseConnector = (new DatabaseConnectorSelector()).getConnectorInstance(databaseConfig);
+            tryToConnectToDatabase();
             setupServices(() -> databaseConnector.getInstance(databaseConfig));
             setupControllers();
         } catch (ClassNotFoundException ex) {
             logger.error("DatabaseDriverEnum connector driver not found", ex);
+        } catch (Sql2oException sql2oException) {
+            logger.error("Error while trying to establish database connection", sql2oException);
+
+            System.exit(-1);
         }
+    }
+
+    private static void tryToConnectToDatabase() throws Sql2oException {
+        databaseConnector.getInstance(databaseConfig).open();
     }
 
 }
