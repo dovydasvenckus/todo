@@ -6,6 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.sql2o.Sql2o;
 
 public abstract class DatabaseConnector {
+
     private static final Logger logger = LoggerFactory.getLogger(DatabaseConnector.class);
 
     private final String driverClassName;

@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class DatabaseConnectorSelector {
+
     private final List<DatabaseDriverEnum> registeredDrivers = Arrays.asList(DatabaseDriverEnum.values());
 
     public DatabaseConnector getConnectorInstance(DatabaseConfig databaseConfig) throws ClassNotFoundException {

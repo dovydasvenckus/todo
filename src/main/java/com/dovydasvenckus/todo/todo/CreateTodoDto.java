@@ -1,7 +1,9 @@
 package com.dovydasvenckus.todo.todo;
 
 public class CreateTodoDto {
+
     private String title;
+
     private Long todoListId;
 
     public String getTitle() {

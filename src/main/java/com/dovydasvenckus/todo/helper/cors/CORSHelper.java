@@ -4,6 +4,7 @@ import static spark.Spark.before;
 import static spark.Spark.options;
 
 public class CORSHelper {
+
     public static void enableCORS(final String origin, final String methods, final String headers) {
         options("/*", (request, response) -> {
 

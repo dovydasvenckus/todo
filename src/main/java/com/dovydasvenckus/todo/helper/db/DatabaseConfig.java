@@ -3,6 +3,7 @@ package com.dovydasvenckus.todo.helper.db;
 import java.util.Optional;
 
 public class DatabaseConfig {
+
     private Optional<String> url;
     private Optional<String> username;
     private Optional<String> password;

@@ -11,7 +11,9 @@ import java.util.Optional;
 import static java.util.Optional.empty;
 
 public class TodoService implements Service {
+
     private final TodoListService todoListService;
+
     private final TodoRepository todoRepository;
 
     public TodoService(Sql2o dataSource, TodoListService todoListService) {

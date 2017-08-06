@@ -1,6 +1,7 @@
 package com.dovydasvenckus.todo.helper.db.connector;
 
 enum DatabaseDriverEnum {
+
     H2("h2"),
     POSTGRESQL("postgresql");
 
