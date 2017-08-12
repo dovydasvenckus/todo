@@ -1,25 +1,25 @@
-package com.dovydasvenckus.todo.helper.cmd.options;
+package com.dovydasvenckus.todo.helper.cmd;
 
-import com.beust.jcommander.Parameter;
+import com.dovydasvenckus.todo.util.arguments.Argument;
 
-public class CommandLineOptions {
+public class CommandLineArgs {
 
-    @Parameter(names = {"--db-url"})
+    @Argument(name = "--db-url")
     private String dbUrl;
 
-    @Parameter(names = {"--db-user"})
+    @Argument(name = "--db-user")
     private String dbUser;
 
-    @Parameter(names = {"--db-pass"})
+    @Argument(name = "--db-pass")
     private String dbPassword;
 
-    @Parameter(names = "--port")
+    @Argument(name = "--port")
     private String port;
 
-    @Parameter(names = "--app-user")
+    @Argument(name = "--app-user")
     private String user;
 
-    @Parameter(names = "--app-pass")
+    @Argument(name = "--app-pass")
     private String password;
 
     public String getDbUrl() {

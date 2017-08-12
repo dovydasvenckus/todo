@@ -8,8 +8,8 @@ import org.pac4j.core.exception.HttpAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.dovydasvenckus.todo.util.Preconditions.checkArgument;
-import static com.dovydasvenckus.todo.util.StringUtils.isNullOrEmpty;
+import static com.dovydasvenckus.todo.util.common.Preconditions.checkArgument;
+import static com.dovydasvenckus.todo.util.common.StringUtils.isNullOrEmpty;
 
 public class AuthService implements Authenticator<UsernamePasswordCredentials> {
 

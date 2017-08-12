@@ -1,4 +1,4 @@
-package com.dovydasvenckus.todo.util;
+package com.dovydasvenckus.todo.util.common;
 
 public class StringUtils {
 

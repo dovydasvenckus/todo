@@ -1,4 +1,4 @@
-package com.dovydasvenckus.todo.util
+package com.dovydasvenckus.todo.util.common
 
 import spock.lang.Specification
 
@@ -36,6 +36,5 @@ class PreconditionsSpec extends Specification {
             def exception = thrown(IllegalArgumentException)
             exception.message == 'Error message'
     }
-
 
 }

@@ -6,7 +6,7 @@ import org.sql2o.Sql2o;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dovydasvenckus.todo.util.StringUtils.isNullOrEmpty;
+import static com.dovydasvenckus.todo.util.common.StringUtils.isNullOrEmpty;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 

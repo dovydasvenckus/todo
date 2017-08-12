@@ -1,9 +1,9 @@
 package com.dovydasvenckus.todo;
 
-import com.beust.jcommander.JCommander;
+
 import com.dovydasvenckus.todo.auth.AuthConfigFactory;
 import com.dovydasvenckus.todo.auth.AuthService;
-import com.dovydasvenckus.todo.helper.cmd.options.CommandLineOptions;
+import com.dovydasvenckus.todo.helper.cmd.CommandLineArgs;
 import com.dovydasvenckus.todo.helper.db.DatabaseConfig;
 import com.dovydasvenckus.todo.helper.db.connector.DatabaseConnector;
 import com.dovydasvenckus.todo.helper.db.connector.DatabaseConnectorSelector;
@@ -13,6 +13,7 @@ import com.dovydasvenckus.todo.todo.TodoController;
 import com.dovydasvenckus.todo.todo.TodoService;
 import com.dovydasvenckus.todo.util.Controller;
 import com.dovydasvenckus.todo.util.Service;
+import com.dovydasvenckus.todo.util.arguments.ArgumentParser;
 import org.pac4j.core.config.Config;
 import org.pac4j.sparkjava.SecurityFilter;
 import org.slf4j.Logger;
@@ -40,18 +41,19 @@ public class TodoApplication {
     private static AuthService authService;
 
     public static void main(String[] args) {
-        CommandLineOptions options = new CommandLineOptions();
-        new JCommander(options, args);
-        port(options.getPort() != null ? new Integer(options.getPort()) : 8080);
-        loadDatabaseConfig(options);
+        ArgumentParser<CommandLineArgs> argumentParser = new ArgumentParser<>(CommandLineArgs.class);
+        CommandLineArgs arguments = argumentParser.parseParameters(args);
+
+        port(arguments.getPort() != null ? new Integer(arguments.getPort()) : 8080);
+        loadDatabaseConfig(arguments);
 
         staticFiles.location("/public");
-        setupSecurityFilters(options);
+        setupSecurityFilters(arguments);
         initModules();
         logger.info("Finished initialization");
     }
 
-    private static void loadDatabaseConfig(CommandLineOptions options) {
+    private static void loadDatabaseConfig(CommandLineArgs options) {
         databaseConfig = new DatabaseConfig(options.getDbUrl(), options.getDbUser(), options.getDbPass());
     }
 
@@ -80,7 +82,7 @@ public class TodoApplication {
         controllers.forEach(Controller::setupRoutes);
     }
 
-    private static void setupSecurityFilters(CommandLineOptions options) {
+    private static void setupSecurityFilters(CommandLineArgs options) {
         authService = new AuthService(options.getUser(), options.getPassword());
         securityConfig = new AuthConfigFactory(authService).build();
 
