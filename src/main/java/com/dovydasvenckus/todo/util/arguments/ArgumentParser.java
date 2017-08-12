@@ -18,7 +18,7 @@ public class ArgumentParser<T> {
         this.argumentRetriever = new SimpleArgumentRetriever();
     }
 
-    ArgumentParser(Class<T> argumentsClass, SimpleArgumentRetriever argumentRetriever) {
+    ArgumentParser(Class<T> argumentsClass, ArgumentRetriever argumentRetriever) {
         this.argumentsClass = argumentsClass;
         this.argumentRetriever = argumentRetriever;
 
