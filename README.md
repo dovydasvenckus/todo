@@ -1,5 +1,5 @@
 # Todo web api
-[![Build Status](https://build.dovydasvenckus.com/api/badges/dovydasvenckus/todo-api/status.svg)](https://build.dovydasvenckus.com/dovydasvenckus/todo-api)
+[![Build Status](https://build.xanadu.tk/api/badges/dovydasvenckus/todo-api/status.svg)](https://build.xanadu.tk/dovydasvenckus/todo-api)
 
 Lightweight simple todo list web api.
 

@@ -17,5 +17,3 @@ CREATE TABLE todo (
   created_at TIMESTAMP,
   updated_at TIMESTAMP
 );
-
-INSERT INTO list VALUES (1, 'Inbox', localtimestamp, localtimestamp);
