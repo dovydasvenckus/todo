@@ -34,7 +34,6 @@ dependencies {
     compile 'org.pac4j:spark-pac4j:2.0.0'
     compile 'org.pac4j:pac4j-http:2.1.0'
 
-    compile 'org.sql2o:sql2o:1.5.4'
     compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
 
     compile 'org.slf4j:slf4j-simple:1.7.25'
@@ -54,7 +53,7 @@ task wrapper(type: Wrapper) {
     gradleVersion = '3.1'
 }
 
-def webBuildDir="$buildDir/todo-web"
+def webBuildDir = "$buildDir/todo-web"
 
 node {
     version = '6.9.1'
@@ -99,7 +98,7 @@ task copyWeb(type: Copy) {
     into "src/main/resources/public"
 }
 
-task stage{
+task stage {
     dependsOn 'clean'
     dependsOn 'cleanWeb'
     dependsOn 'cloneWeb'

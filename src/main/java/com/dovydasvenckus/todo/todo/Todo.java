@@ -17,6 +17,9 @@ public class Todo {
 
     private Date updatedAt;
 
+    public Todo() {
+    }
+
     public Todo(String title) {
         this.title = title;
         this.createdAt = new Date();

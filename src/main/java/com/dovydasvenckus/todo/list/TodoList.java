@@ -12,6 +12,9 @@ public class TodoList {
 
     private Date updatedAt;
 
+    public TodoList() {
+    }
+
     public TodoList(String title) {
         this.title = title;
         this.createdAt = new Date();

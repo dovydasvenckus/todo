@@ -1,8 +1,13 @@
 package com.dovydasvenckus.todo.list;
 
 import com.dovydasvenckus.todo.util.Service;
-import org.sql2o.Sql2o;
+import com.dovydasvenckus.todo.util.sql.mapping.MappingException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,29 +16,49 @@ import static java.util.Optional.empty;
 import static java.util.Optional.of;
 
 public class TodoListService implements Service {
+    private final static Logger logger = LoggerFactory.getLogger(TodoListService.class);
 
     private final TodoListRepository todoListRepository;
 
-    public TodoListService(Sql2o dataSource) {
+    public TodoListService(Connection dataSource) {
         this.todoListRepository = new TodoListRepositoryImpl(dataSource);
     }
 
     public Optional<TodoList> findById(long id) {
-        return todoListRepository.findById(id);
+        try {
+            return todoListRepository.findById(id);
+        } catch (SQLException | MappingException ex) {
+            logger.error("SQL or mapping failure", ex);
+            return Optional.empty();
+        }
     }
 
     public Optional<TodoList> getInbox() {
-        return todoListRepository.findInbox();
+        try {
+            return todoListRepository.findInbox();
+        } catch (SQLException | MappingException ex) {
+            logger.error("SQL or mapping failure", ex);
+            return Optional.empty();
+        }
     }
 
     public List<TodoList> getLists() {
-        return todoListRepository.listAll();
+        try {
+            return todoListRepository.listAll();
+        } catch (SQLException | MappingException ex) {
+            logger.error("SQL or mapping failure", ex);
+            return new ArrayList<>();
+        }
     }
 
     public Optional<TodoList> create(CreateTodoListDto createTodoListDto) {
         if (!isNullOrEmpty(createTodoListDto.getTitle())) {
             TodoList todoList = new TodoList(createTodoListDto.getTitle());
-            todoListRepository.create(todoList);
+            try {
+                todoListRepository.create(todoList);
+            } catch (SQLException | MappingException ex) {
+                logger.error("SQL or mapping failure", ex);
+            }
 
             return of(todoList);
         }

@@ -18,9 +18,8 @@ import org.pac4j.core.config.Config;
 import org.pac4j.sparkjava.SecurityFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sql2o.Sql2o;
-import org.sql2o.Sql2oException;
 
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -69,7 +68,7 @@ public class TodoApplication {
                 .findAny();
     }
 
-    private static void setupServices(Supplier<Sql2o> dataSourceSupplier) {
+    private static void setupServices(Supplier<Connection> dataSourceSupplier) {
         addService(new TodoListService(dataSourceSupplier.get()));
         addService(new TodoService(dataSourceSupplier.get(), (TodoListService) findServiceByName("TodoListService").get()));
     }
@@ -92,20 +91,11 @@ public class TodoApplication {
     private static void initModules() {
         try {
             databaseConnector = (new DatabaseConnectorSelector()).getConnectorInstance(databaseConfig);
-            tryToConnectToDatabase();
-            setupServices(() -> databaseConnector.getInstance(databaseConfig));
+            setupServices(() -> databaseConnector.getInstance(databaseConfig).get());
             setupControllers();
         } catch (ClassNotFoundException ex) {
             logger.error("DatabaseDriverEnum connector driver not found", ex);
-        } catch (Sql2oException sql2oException) {
-            logger.error("Error while trying to establish database connection", sql2oException);
-
-            System.exit(-1);
         }
-    }
-
-    private static void tryToConnectToDatabase() throws Sql2oException {
-        databaseConnector.getInstance(databaseConfig).open();
     }
 
 }

@@ -1,69 +1,60 @@
 package com.dovydasvenckus.todo.list;
 
-import org.sql2o.Connection;
-import org.sql2o.Sql2o;
+import com.dovydasvenckus.todo.util.sql.common.JDBCUtils;
+import com.dovydasvenckus.todo.util.sql.mapping.MappingException;
+import com.dovydasvenckus.todo.util.sql.mapping.ResultSetToListMapper;
 
-import java.util.HashMap;
+import java.sql.*;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 public class TodoListRepositoryImpl implements TodoListRepository {
 
-    private Sql2o sql2o;
-    private Map<String, String> columnMap;
+    private Connection connection;
 
-    public TodoListRepositoryImpl(Sql2o sql2o) {
-        this.sql2o = sql2o;
-        this.columnMap = getColumnMap();
-        this.sql2o.setDefaultColumnMappings(columnMap);
-    }
+    private TodoListMapper mapper = new TodoListMapper();
 
-    private HashMap<String, String> getColumnMap() {
-        HashMap<String, String> columnMap = new HashMap<>();
-        columnMap.put("list_id", "id");
-        columnMap.put("created_at", "createdAt");
-        columnMap.put("updated_at", "updatedAt");
-        return columnMap;
+    public TodoListRepositoryImpl(Connection connection) {
+        this.connection = connection;
     }
 
     @Override
-    public Optional<TodoList> findById(Long id) {
-        try (Connection conn = sql2o.open()) {
-            TodoList todoList = conn
-                    .createQuery("SELECT * FROM list WHERE list_id = :id")
-                    .addParameter("id", id)
-                    .executeAndFetchFirst(TodoList.class);
+    public Optional<TodoList> findById(Long id) throws SQLException, MappingException {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM list WHERE list_id = ?")) {
+            statement.setLong(1, id);
+            statement.setMaxRows(1);
 
-            return Optional.ofNullable(todoList);
+            ResultSet result = statement.executeQuery();
+
+            return Optional.ofNullable(mapper.map(result));
         }
     }
 
     @Override
-    public Optional<TodoList> findInbox() {
+    public Optional<TodoList> findInbox() throws SQLException, MappingException {
         return findById(1L);
     }
 
     @Override
-    public List<TodoList> listAll() {
-        try (Connection connection = sql2o.open()) {
-            return connection.createQuery("SELECT * FROM list")
-                    .executeAndFetch(TodoList.class);
+    public List<TodoList> listAll() throws SQLException, MappingException {
+        try (PreparedStatement preparedStatement = connection.prepareStatement("SELECT * FROM list")) {
+            ResultSet resultSet = preparedStatement.executeQuery();
+            return new ResultSetToListMapper<>(mapper).getListOfResults(resultSet);
         }
     }
 
     @Override
-    public void create(TodoList todoList) {
-        try (Connection conn = sql2o.open()) {
-            Long id = conn.createQuery("INSERT INTO list(title, created_at, updated_at) " +
-                    "VALUES (:title, :created, :updated)", true)
-                    .addParameter("title", todoList.getTitle())
-                    .addParameter("created", todoList.getCreatedAt())
-                    .addParameter("updated", todoList.getUpdatedAt())
-                    .executeUpdate()
-                    .getKey(Long.class);
+    public void create(TodoList todoList) throws SQLException, MappingException {
+        String insertStatement = "INSERT INTO list(title, created_at, updated_at) " +
+                "VALUES (?, ?, ?)";
 
-            todoList.setId(id);
+        try (PreparedStatement statement = connection.prepareStatement(insertStatement, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, todoList.getTitle());
+            statement.setDate(2, new Date(todoList.getCreatedAt().getTime()));
+            statement.setDate(3, new Date(todoList.getUpdatedAt().getTime()));
+            statement.executeUpdate();
+
+            todoList.setId(JDBCUtils.extractGeneratedId(statement.getGeneratedKeys()).get());
         }
     }
 }

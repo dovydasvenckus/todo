@@ -1,29 +1,27 @@
 package com.dovydasvenckus.todo.todo;
 
 import com.dovydasvenckus.todo.list.TodoList;
+import com.dovydasvenckus.todo.util.sql.mapping.MappingException;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-public interface TodoRepository{
-    Optional<Todo> find(Long id);
+public interface TodoRepository {
+    Optional<Todo> find(Long id) throws SQLException, MappingException;
 
-    List<Todo> listAll();
+    List<Todo> listAll() throws SQLException, MappingException;
 
-    List<Todo> listDone();
+    List<Todo> listDone() throws SQLException, MappingException;
 
-    List<Todo> listActive();
+    List<Todo> listActive() throws SQLException, MappingException;
 
-    List<Todo> list(TodoList todoList);
+    List<Todo> list(TodoList todoList) throws SQLException, MappingException;
 
-    Long count(Optional<Boolean> isDone);
+    void add(Todo todo) throws SQLException, MappingException;
 
-    void batchUpdate(List<Todo> todoList);
+    void update(Todo todo) throws SQLException, MappingException;
 
-    void add(Todo todo);
-
-    void update(Todo todo);
-
-    void remove(Long id);
+    void remove(Long id) throws SQLException, MappingException;
 
 }

@@ -1,7 +1,11 @@
 package com.dovydasvenckus.todo.helper.db.connector;
 
 import com.dovydasvenckus.todo.helper.db.DatabaseConfig;
-import org.sql2o.Sql2o;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.util.Optional;
 
 public class PostgresqlConnector extends DatabaseConnector {
 
@@ -11,10 +15,18 @@ public class PostgresqlConnector extends DatabaseConnector {
     }
 
     @Override
-    public Sql2o getInstance(DatabaseConfig databaseConfig) throws IllegalArgumentException {
+    public Optional<Connection> getInstance(DatabaseConfig databaseConfig) throws IllegalArgumentException {
         if (isDataConfigNotBlank(databaseConfig)) {
-            return new Sql2o(databaseConfig.getUrl().get(), databaseConfig.getUsername().get(), databaseConfig.getPassword().get());
+            try {
+                return Optional.of(getConnection(databaseConfig));
+            } catch (SQLException ex) {
+                return Optional.empty();
+            }
         } else throw new IllegalArgumentException("Missing database config parameters.");
+    }
+
+    private Connection getConnection(DatabaseConfig databaseConfig) throws SQLException {
+        return DriverManager.getConnection(databaseConfig.getUrl().get(), databaseConfig.getUsername().get(), databaseConfig.getPassword().get());
     }
 
     private boolean isDataConfigNotBlank(DatabaseConfig config) {

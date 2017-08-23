@@ -1,156 +1,107 @@
 package com.dovydasvenckus.todo.todo;
 
 import com.dovydasvenckus.todo.list.TodoList;
-import org.sql2o.Connection;
-import org.sql2o.Query;
-import org.sql2o.Sql2o;
+import com.dovydasvenckus.todo.util.sql.common.JDBCUtils;
+import com.dovydasvenckus.todo.util.sql.mapping.MappingException;
+import com.dovydasvenckus.todo.util.sql.mapping.ResultSetToListMapper;
 
-import java.util.*;
+import java.sql.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Optional;
 
 public class TodoRepositoryImpl implements TodoRepository {
 
-    private Sql2o sql2o;
-    private Map<String, String> columnMap;
+    private Connection connection;
 
-    public TodoRepositoryImpl(Sql2o sql2o) {
-        this.sql2o = sql2o;
-        initColMap();
-    }
+    private TodoMapper mapper = new TodoMapper();
 
-    private void initColMap() {
-        columnMap = new HashMap<>();
-        columnMap.put("todo_id", "id");
-        columnMap.put("is_done", "isDone");
-        columnMap.put("list_id", "todoListId");
-        columnMap.put("created_at", "createdAt");
-        columnMap.put("updated_at", "updatedAt");
-
-        this.sql2o.setDefaultColumnMappings(columnMap);
+    public TodoRepositoryImpl(Connection connection) {
+        this.connection = connection;
     }
 
     @Override
-    public Optional<Todo> find(Long id) {
-        try (Connection conn = sql2o.open()) {
-            Todo todo = conn
-                    .createQuery("SELECT * FROM todo WHERE todo_id = :id")
-                    .addParameter("id", id)
-                    .executeAndFetchFirst(Todo.class);
-            return Optional.ofNullable(todo);
+    public Optional<Todo> find(Long id) throws SQLException, MappingException {
+
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM todo WHERE todo_id = ?")) {
+            statement.setLong(1, id);
+            return Optional.ofNullable(mapper.map(statement.executeQuery()));
         }
     }
 
     @Override
-    public List<Todo> listAll() {
-        try (Connection conn = sql2o.open()) {
-            return conn
-                    .createQuery("SELECT * FROM todo")
-                    .executeAndFetch(Todo.class);
+    public List<Todo> listAll() throws SQLException, MappingException {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM todo")) {
+            ResultSet resultSet = statement.executeQuery();
+            return new ResultSetToListMapper<>(mapper).getListOfResults(resultSet);
         }
     }
 
     @Override
-    public List<Todo> listDone() {
-        try (Connection conn = sql2o.open()) {
-            return conn
-                    .createQuery("SELECT * FROM todo WHERE is_done = TRUE")
-                    .executeAndFetch(Todo.class);
+    public List<Todo> listDone() throws SQLException, MappingException {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM todo WHERE is_done = TRUE")) {
+            ResultSet resultSet = statement.executeQuery();
+            return new ResultSetToListMapper<>(mapper).getListOfResults(resultSet);
         }
     }
 
     @Override
-    public List<Todo> list(TodoList todoList) {
-        try (Connection connection = sql2o.open()) {
-            return connection.createQuery("SELECT * FROM todo WHERE list_id = :list_id")
-                    .addParameter("list_id", todoList.getId())
-                    .executeAndFetch(Todo.class);
+    public List<Todo> listActive() throws SQLException, MappingException {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM todo WHERE list_id = ? AND is_done = FALSE")) {
+            statement.setLong(1, 1);
+
+            ResultSet resultSet = statement.executeQuery();
+            return new ResultSetToListMapper<>(mapper).getListOfResults(resultSet);
         }
     }
 
     @Override
-    public List<Todo> listActive() {
-        try (Connection conn = sql2o.open()) {
-            return conn
-                    .createQuery("SELECT * FROM todo WHERE list_id = :list_id AND is_done = FALSE")
-                    .addParameter("list_id", 1)
-                    .executeAndFetch(Todo.class);
+    public List<Todo> list(TodoList todoList) throws SQLException, MappingException {
+        try (PreparedStatement statement = connection.prepareStatement("SELECT * FROM todo WHERE list_id = ?")) {
+            statement.setLong(1, todoList.getId());
+
+            ResultSet resultSet = statement.executeQuery();
+            return new ResultSetToListMapper<>(mapper).getListOfResults(resultSet);
+        }
+    }
+
+
+    @Override
+    public void add(Todo todo) throws SQLException, MappingException {
+        String addStatement = "INSERT INTO todo(title, list_id, is_done, created_at, updated_at) " +
+                "VALUES (?, ?, ?, ?, ?)";
+        try (PreparedStatement statement = connection.prepareStatement(addStatement, Statement.RETURN_GENERATED_KEYS)) {
+            statement.setString(1, todo.getTitle());
+            statement.setLong(2, todo.getTodoListId());
+            statement.setBoolean(3, todo.getIsDone());
+            statement.setDate(4, new java.sql.Date(todo.getCreatedAt().getTime()));
+            statement.setDate(5, new java.sql.Date(todo.getUpdatedAt().getTime()));
+
+            statement.executeUpdate();
+            todo.setId(JDBCUtils.extractGeneratedId(statement.getGeneratedKeys()).get());
         }
     }
 
     @Override
-    public Long count(Optional<Boolean> isDone) {
-        String sql = "SELECT COUNT (todo_id) FROM todo ";
-        try (Connection con = sql2o.open()) {
-            return isDone.map(aBoolean -> con.createQuery(sql + " WHERE is_done = :done")
-                    .addParameter("done", aBoolean ? "TRUE" : "FALSE")
-                    .executeScalar(Long.class))
-                    .orElseGet(() -> con.createQuery(sql).executeScalar(Long.class));
-        }
-
-    }
-
-    @Override
-    public void batchUpdate(List<Todo> todoList) {
-        try (Connection conn = sql2o.beginTransaction()) {
-            Query updateQuery = getUpdateQuery(conn);
-            todoList.forEach(todo ->
-                    addParamsToUpdate(updateQuery, todo).addToBatch());
-
-            updateQuery.executeBatch();
-            conn.commit();
+    public void update(Todo todo) throws SQLException, MappingException {
+        String updateQuery = "UPDATE todo " +
+                "SET title = ?, is_done = ?, updated_at = ?, list_id = ?" +
+                "WHERE todo_id = ?";
+        try (PreparedStatement statement = connection.prepareStatement(updateQuery)) {
+            statement.setString(1, todo.getTitle());
+            statement.setBoolean(2, todo.getIsDone());
+            statement.setDate(3, new java.sql.Date(new Date().getTime()));
+            statement.setLong(4, todo.getTodoListId());
+            statement.setLong(5, todo.getId());
+            statement.executeUpdate();
         }
     }
 
     @Override
-    public void add(Todo todo) {
-        try (Connection conn = sql2o.open()) {
-            Long id = conn.createQuery("INSERT INTO todo(title, list_id, is_done, created_at, updated_at) " +
-                    "VALUES (:title, :list_id, :done, :created, :updated)", true)
-                    .addParameter("title", todo.getTitle())
-                    .addParameter("list_id", todo.getTodoListId())
-                    .addParameter("done", todo.getIsDone())
-                    .addParameter("created", todo.getCreatedAt())
-                    .addParameter("updated", todo.getUpdatedAt())
-                    .executeUpdate()
-                    .getKey(Long.class);
-
-            todo.setId(id);
+    public void remove(Long id) throws SQLException, MappingException {
+        try (PreparedStatement statement = connection.prepareStatement("DELETE FROM todo WHERE todo_id = ?")) {
+            statement.setLong(1, id);
+            statement.executeUpdate();
         }
-    }
-
-    @Override
-    public void update(Todo todo) {
-        try (Connection conn = sql2o.open()) {
-            constructUpdateQuery(conn, todo)
-                    .executeUpdate();
-        }
-    }
-
-    @Override
-    public void remove(Long id) {
-        try (Connection conn = sql2o.open()) {
-            conn
-                    .createQuery("DELETE FROM todo WHERE todo_id = :id")
-                    .addParameter("id", id)
-                    .executeUpdate();
-        }
-    }
-
-    private Query constructUpdateQuery(Connection connection, Todo todo) {
-        Query query = getUpdateQuery(connection);
-        addParamsToUpdate(query, todo);
-        return query;
-    }
-
-    private Query getUpdateQuery(Connection connection) {
-        return connection.createQuery("UPDATE todo " +
-                "SET title = :title, is_done = :done, updated_at = :updated " +
-                "WHERE todo_id = :id");
-    }
-
-    private Query addParamsToUpdate(Query query, Todo todo) {
-        return query.addParameter("id", todo.getId())
-                .addParameter("title", todo.getTitle())
-                .addParameter("done", todo.getIsDone())
-                .addParameter("updated", new Date());
     }
 }
