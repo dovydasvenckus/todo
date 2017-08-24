@@ -1,6 +1,6 @@
-package com.dovydasvenckus.todo.helper.db.connector;
+package com.dovydasvenckus.todo.util.db.connector;
 
-import com.dovydasvenckus.todo.helper.db.DatabaseConfig;
+import com.dovydasvenckus.todo.util.db.DatabaseConfig;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,13 +1,13 @@
-package com.dovydasvenckus.todo.helper.db.connector;
+package com.dovydasvenckus.todo.util.db.connector;
 
-import com.dovydasvenckus.todo.helper.db.DatabaseConfig;
+import com.dovydasvenckus.todo.util.db.DatabaseConfig;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.util.Optional;
 
-public class PostgresqlConnector extends DatabaseConnector {
+class PostgresqlConnector extends DatabaseConnector {
 
     public PostgresqlConnector() throws ClassNotFoundException {
         super("org.postgresql.Driver");

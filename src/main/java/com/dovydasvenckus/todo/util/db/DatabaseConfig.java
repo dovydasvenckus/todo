@@ -1,4 +1,4 @@
-package com.dovydasvenckus.todo.helper.db;
+package com.dovydasvenckus.todo.util.db;
 
 import java.util.Optional;
 

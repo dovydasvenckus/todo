@@ -3,10 +3,10 @@ package com.dovydasvenckus.todo;
 
 import com.dovydasvenckus.todo.auth.AuthConfigFactory;
 import com.dovydasvenckus.todo.auth.AuthService;
-import com.dovydasvenckus.todo.helper.cmd.CommandLineArgs;
-import com.dovydasvenckus.todo.helper.db.DatabaseConfig;
-import com.dovydasvenckus.todo.helper.db.connector.DatabaseConnector;
-import com.dovydasvenckus.todo.helper.db.connector.DatabaseConnectorSelector;
+import com.dovydasvenckus.todo.util.cmd.CommandLineArgs;
+import com.dovydasvenckus.todo.util.db.DatabaseConfig;
+import com.dovydasvenckus.todo.util.db.connector.DatabaseConnector;
+import com.dovydasvenckus.todo.util.db.connector.DatabaseConnectorSelector;
 import com.dovydasvenckus.todo.list.TodoListController;
 import com.dovydasvenckus.todo.list.TodoListService;
 import com.dovydasvenckus.todo.todo.TodoController;

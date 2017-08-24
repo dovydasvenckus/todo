@@ -1,4 +1,4 @@
-package com.dovydasvenckus.todo.helper.cors;
+package com.dovydasvenckus.todo.util.cors;
 
 import static spark.Spark.before;
 import static spark.Spark.options;

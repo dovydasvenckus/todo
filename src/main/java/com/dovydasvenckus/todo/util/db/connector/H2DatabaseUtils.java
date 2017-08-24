@@ -1,21 +1,21 @@
-package com.dovydasvenckus.todo.helper.db.connector;
+package com.dovydasvenckus.todo.util.db.connector;
 
-import com.dovydasvenckus.todo.helper.db.SqlFileExecutor;
+import com.dovydasvenckus.todo.util.db.SqlFileExecutor;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
-public class H2DatabaseUtils {
+class H2DatabaseUtils {
 
     static void createTables(Connection connection) throws SQLException {
         SqlFileExecutor sqlFileExecutor = new SqlFileExecutor(connection);
-        sqlFileExecutor.execute("/sql/hsqldb/create.sql");
+        sqlFileExecutor.execute("/sql/h2/create.sql");
     }
 
     static void initSeedData(Connection connection) throws SQLException {
         SqlFileExecutor sqlFileExecutor = new SqlFileExecutor(connection);
-        sqlFileExecutor.execute("/sql/hsqldb/seed.sql");
+        sqlFileExecutor.execute("/sql/h2/seed.sql");
     }
 
     static Connection getInMemoryDbConnection() throws SQLException {

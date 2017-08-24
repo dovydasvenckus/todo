@@ -1,4 +1,4 @@
-package com.dovydasvenckus.todo.helper.db;
+package com.dovydasvenckus.todo.util.db;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

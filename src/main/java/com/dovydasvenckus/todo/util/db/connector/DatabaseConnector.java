@@ -1,6 +1,6 @@
-package com.dovydasvenckus.todo.helper.db.connector;
+package com.dovydasvenckus.todo.util.db.connector;
 
-import com.dovydasvenckus.todo.helper.db.DatabaseConfig;
+import com.dovydasvenckus.todo.util.db.DatabaseConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

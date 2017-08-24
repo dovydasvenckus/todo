@@ -1,4 +1,4 @@
-package com.dovydasvenckus.todo.helper.db.connector;
+package com.dovydasvenckus.todo.util.db.connector;
 
 enum DatabaseDriverEnum {
 

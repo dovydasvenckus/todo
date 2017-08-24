@@ -1,4 +1,4 @@
-package com.dovydasvenckus.todo.helper.cmd;
+package com.dovydasvenckus.todo.util.cmd;
 
 import com.dovydasvenckus.todo.util.arguments.Argument;
 
