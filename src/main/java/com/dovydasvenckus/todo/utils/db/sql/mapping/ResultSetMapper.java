@@ -1,4 +1,4 @@
-package com.dovydasvenckus.todo.utils.sql.mapping;
+package com.dovydasvenckus.todo.utils.db.sql.mapping;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

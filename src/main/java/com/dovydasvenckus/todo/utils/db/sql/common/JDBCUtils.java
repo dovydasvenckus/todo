@@ -1,4 +1,4 @@
-package com.dovydasvenckus.todo.utils.sql.common;
+package com.dovydasvenckus.todo.utils.db.sql.common;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

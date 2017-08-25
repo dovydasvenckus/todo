@@ -4,7 +4,7 @@ import com.dovydasvenckus.todo.common.RepositorySpec
 import com.dovydasvenckus.todo.list.TodoList
 import com.dovydasvenckus.todo.list.TodoListRepository
 import com.dovydasvenckus.todo.list.TodoListRepositoryImpl
-import com.dovydasvenckus.todo.utils.sql.mapping.ResultSetToListMapper
+import com.dovydasvenckus.todo.utils.db.sql.mapping.ResultSetToListMapper
 
 import java.sql.ResultSet
 

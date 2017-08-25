@@ -1,8 +1,8 @@
 package com.dovydasvenckus.todo.list;
 
-import com.dovydasvenckus.todo.utils.sql.common.JDBCUtils;
-import com.dovydasvenckus.todo.utils.sql.mapping.MappingException;
-import com.dovydasvenckus.todo.utils.sql.mapping.ResultSetToListMapper;
+import com.dovydasvenckus.todo.utils.db.sql.common.JDBCUtils;
+import com.dovydasvenckus.todo.utils.db.sql.mapping.MappingException;
+import com.dovydasvenckus.todo.utils.db.sql.mapping.ResultSetToListMapper;
 
 import java.sql.*;
 import java.util.List;

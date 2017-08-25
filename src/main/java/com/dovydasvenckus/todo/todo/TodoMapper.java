@@ -1,6 +1,6 @@
 package com.dovydasvenckus.todo.todo;
 
-import com.dovydasvenckus.todo.utils.sql.mapping.ResultSetMapper;
+import com.dovydasvenckus.todo.utils.db.sql.mapping.ResultSetMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

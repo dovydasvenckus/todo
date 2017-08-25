@@ -3,7 +3,6 @@ package com.dovydasvenckus.todo;
 
 import com.dovydasvenckus.todo.auth.AuthConfigFactory;
 import com.dovydasvenckus.todo.auth.AuthService;
-import com.dovydasvenckus.todo.utils.cmd.CommandLineArgs;
 import com.dovydasvenckus.todo.utils.db.DatabaseConfig;
 import com.dovydasvenckus.todo.utils.db.connectors.DatabaseConnector;
 import com.dovydasvenckus.todo.utils.db.connectors.DatabaseConnectorSelector;
