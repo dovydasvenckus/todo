@@ -1,8 +1,8 @@
 package com.dovydasvenckus.todo.common
 
-import com.dovydasvenckus.todo.util.db.DatabaseConfig
-import com.dovydasvenckus.todo.util.db.connector.AlwaysInMemoryH2Connector
-import com.dovydasvenckus.todo.util.db.connector.DatabaseConnector
+import com.dovydasvenckus.todo.utils.db.DatabaseConfig
+import com.dovydasvenckus.todo.utils.db.connectors.AlwaysInMemoryH2Connector
+import com.dovydasvenckus.todo.utils.db.connectors.DatabaseConnector
 import spock.lang.Specification
 
 import java.sql.Connection

@@ -1,7 +1,7 @@
 package com.dovydasvenckus.todo.list;
 
-import com.dovydasvenckus.todo.util.Service;
-import com.dovydasvenckus.todo.util.sql.mapping.MappingException;
+import com.dovydasvenckus.todo.utils.Service;
+import com.dovydasvenckus.todo.utils.sql.mapping.MappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.dovydasvenckus.todo.util.common.StringUtils.isNullOrEmpty;
+import static com.dovydasvenckus.todo.utils.common.StringUtils.isNullOrEmpty;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 

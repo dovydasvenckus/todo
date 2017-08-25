@@ -1,7 +1,7 @@
 package com.dovydasvenckus.todo.todo;
 
 import com.dovydasvenckus.todo.list.TodoList;
-import com.dovydasvenckus.todo.util.sql.mapping.MappingException;
+import com.dovydasvenckus.todo.utils.sql.mapping.MappingException;
 
 import java.sql.SQLException;
 import java.util.List;

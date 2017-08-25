@@ -1,6 +1,6 @@
 package com.dovydasvenckus.todo.todo;
 
-import com.dovydasvenckus.todo.util.Controller;
+import com.dovydasvenckus.todo.utils.Controller;
 import com.google.gson.Gson;
 import spark.Route;
 

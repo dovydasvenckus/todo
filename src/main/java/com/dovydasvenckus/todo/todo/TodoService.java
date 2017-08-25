@@ -2,8 +2,8 @@ package com.dovydasvenckus.todo.todo;
 
 import com.dovydasvenckus.todo.list.TodoList;
 import com.dovydasvenckus.todo.list.TodoListService;
-import com.dovydasvenckus.todo.util.Service;
-import com.dovydasvenckus.todo.util.sql.mapping.MappingException;
+import com.dovydasvenckus.todo.utils.Service;
+import com.dovydasvenckus.todo.utils.sql.mapping.MappingException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
