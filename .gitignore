@@ -22,7 +22,4 @@ hs_err_pid*
 # Do not exclude gradle wrapper
 !gradle/wrapper/*
 
-src/main/resources/public/*.js
-src/main/resources/**/*.css
-src/main/resources/public/*.map
-src/main/resources/public/index.html
+todo-api/src/main/resources/public/
