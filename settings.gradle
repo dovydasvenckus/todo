@@ -1,1 +1,3 @@
 rootProject.name = 'todo'
+
+include 'argument-parser', 'common-utils', 'jdbc-utils', 'todo-api'
