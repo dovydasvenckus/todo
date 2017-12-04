@@ -1,5 +1,6 @@
 # Todo web api
 [![Build Status](https://travis-ci.org/dovydasvenckus/todo-api.svg?branch=master)](https://travis-ci.org/dovydasvenckus/todo-api)
+
 Lightweight simple todo list web api.
 
 This is my pet project. This application uses just a handful of lightweight libs. I have chosen this approach for the sake of discovering pain points that heavy frameworks (Spring, Hibernate) and  other libs solve.
