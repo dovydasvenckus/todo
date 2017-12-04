@@ -28,24 +28,19 @@ repositories {
 dependencies {
     compile project(':argument-parser')
     compile project(':jdbc-utils')
-    compile 'com.sparkjava:spark-core:2.6.0'
+    compile 'com.sparkjava:spark-core:2.7.1'
 
     compile 'com.google.code.gson:gson:2.8.1'
-    compile 'org.pac4j:spark-pac4j:2.0.0'
+    compile 'org.pac4j:spark-pac4j:2.1.0'
     compile 'org.pac4j:pac4j-http:2.1.0'
 
     compile 'org.postgresql:postgresql:9.4-1201-jdbc41'
 
     compile 'org.slf4j:slf4j-simple:1.7.25'
 
-    //Excluding H2 from stage task
     if (project.gradle.startParameter.taskNames[0] != 'stage') {
         compile 'com.h2database:h2:1.4.196'
     }
-}
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '3.1'
 }
 
 def webBuildDir = "$buildDir/todo-web"
