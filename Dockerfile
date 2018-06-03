@@ -13,6 +13,7 @@ RUN apk --update add git && \
     rm -r todo-api && \
     rm -r /root/.gradle && \
     rm -r /var/cache/apk
+USER nobody
 ENTRYPOINT ["/bin/sh", "-c", \
  "java -jar $APP_NAME --app-user $APP_USER --app-pass $APP_PASS"]
 EXPOSE 8080
