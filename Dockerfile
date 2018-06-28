@@ -3,14 +3,12 @@ MAINTAINER Dovydas Venckus "dovydas.venckus@live.com"
 ENV APP_ROOT=/home/todo \
     APP_NAME=todo-api-1.0-all.jar
 WORKDIR $APP_ROOT
-RUN apk --update add git && \
-    git clone https://github.com/dovydasvenckus/todo-api.git && \
-    apk --update del git && \
-    cd todo-api && \
+COPY [".", "${APP_ROOT}/source/"]
+RUN cd source && \
     ./gradlew build && \
     cp todo-api/build/libs/$APP_NAME .. && \
     cd .. && \
-    rm -r todo-api && \
+    rm -r source && \
     rm -r /root/.gradle && \
     rm -r /var/cache/apk
 USER nobody
