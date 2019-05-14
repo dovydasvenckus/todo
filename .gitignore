@@ -18,6 +18,7 @@ hs_err_pid*
 
 # gradle
 .gradle
+out
 
 # Do not exclude gradle wrapper
 !gradle/wrapper/*
