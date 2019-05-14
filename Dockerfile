@@ -12,5 +12,5 @@ RUN cd source && \
     rm -r /root/.gradle
 USER nobody
 ENTRYPOINT ["/bin/sh", "-c", \
- "java -jar $APP_NAME --app-user $APP_USER --app-pass $APP_PASS"]
+ "java -jar $APP_NAME --app-user $APP_USER --app-pass $APP_PASS --db-url $TODO_DB_JDBC --db-user $TODO_DB_USERNAME --db-pass $TODO_DB_PASSWORD"]
 EXPOSE 8080
