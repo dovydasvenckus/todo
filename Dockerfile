@@ -9,8 +9,7 @@ RUN cd source && \
     cp todo-api/build/libs/$APP_NAME .. && \
     cd .. && \
     rm -r source && \
-    rm -r /root/.gradle && \
-    rm -r /var/cache/apk
+    rm -r /root/.gradle
 USER nobody
 ENTRYPOINT ["/bin/sh", "-c", \
  "java -jar $APP_NAME --app-user $APP_USER --app-pass $APP_PASS"]
