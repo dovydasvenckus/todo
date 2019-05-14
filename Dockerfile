@@ -1,7 +1,7 @@
 FROM openjdk:8-jdk-alpine
 MAINTAINER Dovydas Venckus "dovydas.venckus@live.com"
 ENV APP_ROOT=/home/todo \
-    APP_NAME=todo-api-1.0-all.jar
+    APP_NAME=todo-api-1.0.jar
 WORKDIR $APP_ROOT
 COPY [".", "${APP_ROOT}/source/"]
 RUN cd source && \
