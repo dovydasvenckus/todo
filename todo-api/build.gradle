@@ -19,7 +19,7 @@ dependencies {
     implementation 'org.pac4j:spark-pac4j:3.0.0'
     implementation 'org.pac4j:pac4j-http:3.7.0'
 
-    implementation 'org.postgresql:postgresql:9.4-1201-jdbc41'
+    implementation 'org.postgresql:postgresql:42.2.6'
 
     implementation 'org.slf4j:slf4j-simple:1.7.25'
 
