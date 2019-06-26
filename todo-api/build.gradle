@@ -13,11 +13,11 @@ repositories {
 dependencies {
     implementation project(':argument-parser')
     implementation project(':jdbc-utils')
-    implementation 'com.sparkjava:spark-core:2.7.1'
+    implementation 'com.sparkjava:spark-core:2.9.1'
 
     implementation 'com.google.code.gson:gson:2.8.1'
-    implementation 'org.pac4j:spark-pac4j:2.1.0'
-    implementation 'org.pac4j:pac4j-http:2.1.0'
+    implementation 'org.pac4j:spark-pac4j:3.0.0'
+    implementation 'org.pac4j:pac4j-http:3.7.0'
 
     implementation 'org.postgresql:postgresql:9.4-1201-jdbc41'
 
